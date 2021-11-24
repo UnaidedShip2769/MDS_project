@@ -1,6 +1,8 @@
 #include <iostream>
 
 int main() {
-    std::cout << "It workytujhfdghdfs!!!" << std::endl;
+
+    std::cout << "2" << std::endl;
+
     return 0;
 }
