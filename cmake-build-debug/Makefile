@@ -129,6 +129,54 @@ MDS_project/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MDS_project.dir/build.make CMakeFiles/MDS_project.dir/build
 .PHONY : MDS_project/fast
 
+Shingling.o: Shingling.cpp.o
+.PHONY : Shingling.o
+
+# target to build an object file
+Shingling.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MDS_project.dir/build.make CMakeFiles/MDS_project.dir/Shingling.cpp.o
+.PHONY : Shingling.cpp.o
+
+Shingling.i: Shingling.cpp.i
+.PHONY : Shingling.i
+
+# target to preprocess a source file
+Shingling.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MDS_project.dir/build.make CMakeFiles/MDS_project.dir/Shingling.cpp.i
+.PHONY : Shingling.cpp.i
+
+Shingling.s: Shingling.cpp.s
+.PHONY : Shingling.s
+
+# target to generate assembly for a file
+Shingling.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MDS_project.dir/build.make CMakeFiles/MDS_project.dir/Shingling.cpp.s
+.PHONY : Shingling.cpp.s
+
+input_text.o: input_text.cpp.o
+.PHONY : input_text.o
+
+# target to build an object file
+input_text.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MDS_project.dir/build.make CMakeFiles/MDS_project.dir/input_text.cpp.o
+.PHONY : input_text.cpp.o
+
+input_text.i: input_text.cpp.i
+.PHONY : input_text.i
+
+# target to preprocess a source file
+input_text.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MDS_project.dir/build.make CMakeFiles/MDS_project.dir/input_text.cpp.i
+.PHONY : input_text.cpp.i
+
+input_text.s: input_text.cpp.s
+.PHONY : input_text.s
+
+# target to generate assembly for a file
+input_text.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MDS_project.dir/build.make CMakeFiles/MDS_project.dir/input_text.cpp.s
+.PHONY : input_text.cpp.s
+
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -162,6 +210,12 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... MDS_project"
+	@echo "... Shingling.o"
+	@echo "... Shingling.i"
+	@echo "... Shingling.s"
+	@echo "... input_text.o"
+	@echo "... input_text.i"
+	@echo "... input_text.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
