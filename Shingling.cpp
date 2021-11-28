@@ -77,7 +77,7 @@ vector<set<string>>  Shingling(std::vector<char>text,int k){
 
 }
 
-void Merge (vector<set<string>> v, set<string> &vocub){
+void Merge (vector<set<string>> &v, set<string> &vocub){
 
     for (int i=0;i<v.size();i++){
         vocub.insert(v.at(i).begin(),v.at(i).end());
@@ -105,18 +105,23 @@ vector<char> read_text(char* path){
 
 }
 
-vector <int> onehot_encode(set<string> shingle,set<string>vocub){
+vector <vector<bool>> onehot_encode(vector<set<string>> &shingle,set<string>&vocub){
     set<string>::iterator it,it1;
-    vector<int>onehot(shingle.size(),0);
-    string tmp;
-    for (it=shingle.begin();it!=shingle.end();++it){
-        tmp= *it;
-        int i=0;
-        for(it1=vocub.begin();it1!=vocub.end();++it1){
-            i++;
-            if(tmp==*it1){
-                onehot[i]=1;
-            }
+    vector<bool> tmp(vocub.size(),0);
+    vector<vector<bool>> onehot(shingle.size(),tmp);
+    int i=0;
+    for(it=vocub.begin();it!=vocub.end();++it){
+
+        string tmp=*it;
+        for(int j=0;j<shingle.size();j++){
+            if(shingle.at(j).find(tmp)!=shingle.at(j).end())
+                onehot.at(j).at(i)=true;
         }
+
+        i++;
     }
+    return onehot;
+
 }
+
+//compiles

@@ -6,6 +6,16 @@
 
 #IncludeRegexTransform: 
 
+/home/peri/CLionProjects/MDS_project/LSH.hpp
+vector
+-
+set
+-
+fstream
+-
+string
+-
+
 /home/peri/CLionProjects/MDS_project/Shingling.cpp
 iostream
 -
@@ -19,4 +29,14 @@ queue
 -
 iterator
 -
+
+/home/peri/CLionProjects/MDS_project/main.cpp
+iostream
+-
+vector
+-
+set
+-
+LSH.hpp
+/home/peri/CLionProjects/MDS_project/LSH.hpp
 
