@@ -5,38 +5,84 @@
 #include <vector>
 #include <fstream>
 #include <set>
+#include <queue>
 #include <iterator>
 using namespace std;
-set<string>  Shingling(std::vector<char>text,int k){
+vector<set<string>>  Shingling(std::vector<char>text,int k){
 
     //check if vector is corectly loaded
     if ((text.size()==1&&text.at(0)=='?') || text.size()==0){
         std::cout << "error loading vector";
     }
-    string tmp;
-    set <string> shingles;
-    char temp=' ';
-    for (int i = 0;i<text.size()-k+1;i++){
 
-        for(int j=0;j<k;j++){
-            if(text.at(i+j)==temp)
-                tmp=tmp+'_';
-            else
-                tmp= tmp+(text.at(i+j));
-        }
-        shingles.insert(tmp);
+
+
+
+
+    vector<set <string>> shingles;
+    set<string> temporary;
+    vector<char> temp ;
+    string tmp;
+    char space= ' ';
+    bool flag=false;
+    int itt=0;
+    for(int i =0;i<k;i++)
+        temp.push_back(text.at(i));
+    int i=k-1;
+    while(i<text.size()-k+1){
         tmp.clear();
+        for (int j=0;j<k;j++)
+            tmp=tmp+temp.at(j);
+
+        if(temp[k-1]==space){
+            //check if it is word with under k # of letters
+
+
+            if(temporary.size()==0){
+                //if so discard
+
+                temporary.clear();
+            }
+
+
+
+            else{
+                //else discard and add new set to vector
+                itt++;
+
+                shingles.push_back(temporary);
+                temporary.clear();
+
+            }
+            i++;
+            for(int j =0;j<k;j++)
+
+                temp[j]=text.at(j+i);
+            i+=(k-1);
+        }
+        else{
+
+            temporary.insert(tmp);
+            i++;
+            for (int j=0;j<k-1;j++){
+                temp[j]=temp[j+1];
+            }
+
+            temp [k-1]=text.at(i);
+        }
+
     }
 
     return shingles;
 
 }
 
-set<string>  Merge (set<string> s1,set<string> s2){
+void Merge (vector<set<string>> v, set<string> &vocub){
 
-    set<string> tmp;
-    tmp.insert(s2.begin(),s2.end());
-    return tmp;
+    for (int i=0;i<v.size();i++){
+        vocub.insert(v.at(i).begin(),v.at(i).end());
+    }
+
 
 }
 

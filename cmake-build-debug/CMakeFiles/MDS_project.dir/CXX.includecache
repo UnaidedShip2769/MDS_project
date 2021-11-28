@@ -15,12 +15,8 @@ fstream
 -
 set
 -
-
-/home/peri/CLionProjects/MDS_project/input_text.cpp
-iostream
+queue
 -
-fstream
--
-vector
+iterator
 -
 

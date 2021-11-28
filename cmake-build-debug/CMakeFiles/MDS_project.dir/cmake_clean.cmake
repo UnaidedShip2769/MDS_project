@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/MDS_project.dir/Shingling.cpp.o"
-  "CMakeFiles/MDS_project.dir/input_text.cpp.o"
   "CMakeFiles/MDS_project.dir/main.cpp.o"
   "MDS_project"
   "MDS_project.pdb"

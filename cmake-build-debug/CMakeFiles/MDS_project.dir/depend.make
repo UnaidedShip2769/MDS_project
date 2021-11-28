@@ -3,8 +3,6 @@
 
 CMakeFiles/MDS_project.dir/Shingling.cpp.o: \
  ../Shingling.cpp
-CMakeFiles/MDS_project.dir/input_text.cpp.o: \
- ../input_text.cpp
 CMakeFiles/MDS_project.dir/main.cpp.o: \
  ../LSH.hpp \
  ../main.cpp
