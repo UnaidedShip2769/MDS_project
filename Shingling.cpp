@@ -124,4 +124,26 @@ vector <vector<bool>> onehot_encode(vector<set<string>> &shingle,set<string>&voc
 
 }
 
+vector<int> minHash(vector<bool> &onehot,int num){
+    vector <int>minHash(num,0);
+    int j=0;
+    for(int i=0;i<onehot.size();i++){
+        if(j>=num)
+            break;
+        if(onehot.at(i)==true){
+            minHash.at(j)=i;
+            j++;
+        }
+
+    }
+    return minHash;
+}
+
+vector<vector<int>>minhash(vector<vector<bool>> &onehot,int num){
+    vector<vector<int>> minhash;
+    for (int i=0;i< onehot.size();i++){
+        minhash.push_back( minHash(onehot.at(i),num));
+    }
+    return minhash;
+}
 //compiles

@@ -17,7 +17,8 @@ int main() {
     Merge(s1,vocub);
     Merge(s2,vocub);
     onehot1= onehot_encode(s1,vocub);
-
+    vector<vector<int>>min;
+    min= minhash(onehot1,3);
 
     return 0;
 }//planning
