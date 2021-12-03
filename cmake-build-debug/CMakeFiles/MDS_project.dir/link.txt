@@ -1,1 +1,1 @@
-/usr/bin/c++ -g CMakeFiles/MDS_project.dir/main.cpp.o -o MDS_project 
+/usr/bin/c++ -g CMakeFiles/MDS_project.dir/main.cpp.o CMakeFiles/MDS_project.dir/Shingling.cpp.o -o MDS_project 

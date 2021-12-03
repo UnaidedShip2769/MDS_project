@@ -3,4 +3,4 @@ project(MDS_project)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(MDS_project main.cpp)
+add_executable(MDS_project main.cpp Shingling.cpp LSH.hpp)

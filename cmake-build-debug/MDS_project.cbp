@@ -82,6 +82,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/peri/CLionProjects/MDS_project/LSH.hpp">
+			<Option target="MDS_project"/>
+		</Unit>
+		<Unit filename="/home/peri/CLionProjects/MDS_project/Shingling.cpp">
+			<Option target="MDS_project"/>
+		</Unit>
 		<Unit filename="/home/peri/CLionProjects/MDS_project/main.cpp">
 			<Option target="MDS_project"/>
 		</Unit>

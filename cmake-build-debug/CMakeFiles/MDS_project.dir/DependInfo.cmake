@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/home/peri/CLionProjects/MDS_project/Shingling.cpp" "/home/peri/CLionProjects/MDS_project/cmake-build-debug/CMakeFiles/MDS_project.dir/Shingling.cpp.o"
   "/home/peri/CLionProjects/MDS_project/main.cpp" "/home/peri/CLionProjects/MDS_project/cmake-build-debug/CMakeFiles/MDS_project.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")

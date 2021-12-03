@@ -129,6 +129,30 @@ MDS_project/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MDS_project.dir/build.make CMakeFiles/MDS_project.dir/build
 .PHONY : MDS_project/fast
 
+Shingling.o: Shingling.cpp.o
+.PHONY : Shingling.o
+
+# target to build an object file
+Shingling.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MDS_project.dir/build.make CMakeFiles/MDS_project.dir/Shingling.cpp.o
+.PHONY : Shingling.cpp.o
+
+Shingling.i: Shingling.cpp.i
+.PHONY : Shingling.i
+
+# target to preprocess a source file
+Shingling.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MDS_project.dir/build.make CMakeFiles/MDS_project.dir/Shingling.cpp.i
+.PHONY : Shingling.cpp.i
+
+Shingling.s: Shingling.cpp.s
+.PHONY : Shingling.s
+
+# target to generate assembly for a file
+Shingling.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MDS_project.dir/build.make CMakeFiles/MDS_project.dir/Shingling.cpp.s
+.PHONY : Shingling.cpp.s
+
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -162,6 +186,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... MDS_project"
+	@echo "... Shingling.o"
+	@echo "... Shingling.i"
+	@echo "... Shingling.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

@@ -6,7 +6,17 @@
 
 #IncludeRegexTransform: 
 
-/home/peri/CLionProjects/MDS_project/main.cpp
+/home/peri/CLionProjects/MDS_project/Shingling.cpp
 iostream
+-
+vector
+-
+fstream
+-
+set
+-
+queue
+-
+iterator
 -
 
