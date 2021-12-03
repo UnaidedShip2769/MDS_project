@@ -1,3 +1,0 @@
-/home/peri/CLionProjects/MDS_project/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/peri/CLionProjects/MDS_project/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/peri/CLionProjects/MDS_project/cmake-build-debug/CMakeFiles/MDS_project.dir
