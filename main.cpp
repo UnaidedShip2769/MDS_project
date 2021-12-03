@@ -5,7 +5,6 @@
 
 
 int main() {
-
     using namespace std;
     vector<char> text= read_text("../data/test.txt");
     vector<char> text2= read_text("../data/test2.txt");
