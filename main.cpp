@@ -1,52 +1,24 @@
 #include <iostream>
-#include <iterator>
-#include <fstream>
 #include <vector>
+#include <set>
+#include "LSH.hpp"
 
-using namespace std;
 
-class document
-{
-public:
-    vector<string> contents;
-    vector<int> hash;
+int main() {
 
-    document()
-    {
-        bool flag = false;
-        while(!flag)
-        {
-            string path;
-            cout << "Enter path for dataset (eg ../datasets/text1.txt): ";
-            cin >> path;
-            string line;
-            ifstream file(path);
-            if (file.good())
-            {
-                flag = true;
-                while (getline(file, line)) {
-                    this->contents.push_back(line);
-                }
-            }
-            else
-            {
-                cout << "File not found! Please enter a valid path!" << endl;
-            }
-        }
-    }
-    void print()
-    {
-        for (string i : this->contents)
-        {
-           cout << i << endl;
-        }
-    };
-};
+    using namespace std;
+    vector<char> text= read_text("../data/test.txt");
+    vector<char> text2= read_text("../data/test2.txt");
+    vector<set<string>> s1= Shingling(text,3);
+    vector<set<string>> s2= Shingling(text2,3);
+    set<string> vocub;
+    vector<vector<bool>>onehot1;
 
-int main()
-{
-    document doc1;
-    doc1.print();
+    Merge(s1,vocub);
+    Merge(s2,vocub);
+    onehot1= onehot_encode(s1,vocub);
+    vector<vector<int>>min;
+    min= minhash(onehot1,3);
 
     return 0;
-}
+}//planning
