@@ -26,7 +26,9 @@ struct QuadLeaf
 {
     vector<int> contents;
     QuadLeaf() {};
-    QuadLeaf(vector<int> numbers);
+    //QuadLeaf(vector<int> numbers);
+    QuadLeaf(vector<DimensionSpace> boundrySpace);
+    vector<DimensionSpace> boundrySpace;
 };
 
 struct QuadNode
@@ -44,6 +46,7 @@ class Quadtree
     vector<Quadtree> subtrees;
     vector<DimensionSpace> boundrySpace;
 public:
+    vector<vector<DimensionSpace>> makeNewDimensionSpaces();
     Quadtree(int dimensions, vector<DimensionSpace> boundrySpace);
     Quadtree(int dimensions);
     void print();
@@ -52,5 +55,4 @@ public:
     void delete_element(vector<int> number);
     void update();
     void kNN(vector<int> number);
-
 };

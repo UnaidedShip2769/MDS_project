@@ -10,8 +10,8 @@ int main()
     number.push_back(1);
     number.push_back(1);
     vector<int> number2;
-    number2.push_back(99);
-    number2.push_back(99);
+    number2.push_back(2);
+    number2.push_back(2);
 
     Quadtree quad1(2);
     quad1.insert(number);
