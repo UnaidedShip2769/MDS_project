@@ -10,12 +10,28 @@ int main()
     number.push_back(1);
     number.push_back(1);
     vector<int> number2;
-    number2.push_back(2);
-    number2.push_back(2);
+    number2.push_back(99);
+    number2.push_back(99);
+    vector<int> number3;
+    number3.push_back(1);
+    number3.push_back(99);
+    vector<int> number4;
+    number4.push_back(99);
+    number4.push_back(1);
+    vector<int> number5;
+    number5.push_back(24);
+    number5.push_back(24);
+    vector<int> number6;
+    number6.push_back(23);
+    number6.push_back(23);
 
     Quadtree quad1(2);
     quad1.insert(number);
     quad1.insert(number2);
+    quad1.insert(number3);
+    quad1.insert(number4);
+    quad1.insert(number5);
+    quad1.insert(number6);
     quad1.print();
 
     /*quad1.insert(number)

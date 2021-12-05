@@ -99,7 +99,7 @@ Quadtree::Quadtree(int dimensions, vector<DimensionSpace> boundrySpace)
             flag = true;
             int numberofsubtrees = 2 ^ dimensions;
             int i = 0;
-            for(DimensionSpace dim : boundrySpace)
+            for(DimensionSpace &dim : boundrySpace)
             {
                 this->boundrySpace.push_back(dim);
                 this->head.contents.push_back((this->boundrySpace.at(i).end + this->boundrySpace.at(i).start) / 2);
@@ -154,7 +154,7 @@ void Quadtree::print()
     //cout << "Printing!!!" << endl;
     cout << "QuadNode contents: ";
     int k = 0;
-    for(int j : this->head.contents)
+    for(int &j : this->head.contents)
     {
         cout << j;
         k++;
@@ -164,7 +164,12 @@ void Quadtree::print()
         }
     }
     cout << endl;
-    for (QuadLeaf j : this->head.leaves)
+    /*cout << "boundrySpace: " << endl;
+    for (DimensionSpace &i : this->boundrySpace)
+    {
+        cout << i.start << "-" << i.end << endl;
+    }*/
+    for (QuadLeaf &j : this->head.leaves)
     {
         int k = 0;
         cout << "QuadLeaf contents: ";
@@ -180,20 +185,37 @@ void Quadtree::print()
         cout << endl;
     }
     cout << endl;
-    for (Quadtree i : this->subtrees)
+    for (Quadtree &i : this->subtrees)
     {
         i.print();
     }
 }
+
+/*void QuadLeaf::printContent()
+{
+    int j = 1;
+    cout << "------------" << endl << "Let's see the contents now: " << endl << "------------" << endl;
+    for(int &i : this->contents)
+    {
+        //cout << "leaf->contents.size() = " << leaf->contents.size() << endl;
+        cout << i;
+        if (j < this->contents.size())
+        {
+            cout << ",";
+        }
+        j++;
+    }
+    cout << endl << "------------" << endl << "End!" << endl << "------------" << endl;
+}*/
 
 void Quadtree::insert(vector<int> number)
 {
     //cout << "Inserting!!" << endl;
     int j = 0;
     bool inSpace = true;
-    for(DimensionSpace dimension : this->boundrySpace)
+    for(DimensionSpace &dimension : this->boundrySpace)
     {
-        if(!(j >= dimension.start && j <= dimension.end))
+        if(!(number.at(j) >= dimension.start && number.at(j) <= dimension.end))
         {
             inSpace = false;
         }
@@ -207,11 +229,11 @@ void Quadtree::insert(vector<int> number)
     else
     {
         int leafnum = 0;
-        for(QuadLeaf i : this->head.leaves)
+        for(QuadLeaf &i : this->head.leaves)
         {
             bool flag = true;
             int k = 0;
-            for(DimensionSpace j : i.boundrySpace)
+            for(DimensionSpace &j : i.boundrySpace)
             {
                 if(!(number.at(k) >= j.start && number.at(k) <= j.end))
                 {
@@ -221,9 +243,9 @@ void Quadtree::insert(vector<int> number)
             }
             if(flag == true)
             {
-                cout << "Flag = true" << endl;
-                if(i.contents.empty())
+                if(i.used == false)
                 {
+                    i.used = true;
                     cout << "Found empty contents" << endl;
                     //i.contents = number;
                     for (int num : number)
@@ -235,13 +257,26 @@ void Quadtree::insert(vector<int> number)
                 else
                 {
                     cout << "Splitting!!!" << endl;
-                    vector<vector<DimensionSpace>> newVectorRanges = this->makeNewDimensionSpaces();
-                    for(vector<DimensionSpace> l : newVectorRanges)
+                    //vector<vector<DimensionSpace>> newVectorRanges = this->makeNewDimensionSpaces();
+                    //for(vector<DimensionSpace> l : newVectorRanges)
+                    //{
+                    //    Quadtree a (this->dimension, l);
+                    //    this->subtrees.push_back(a);
+                    //    cout << "Created new quadtree!" << endl;
+                    //}
+                    Quadtree a (this->dimension, i.boundrySpace);
+                    /*cout << "New boundrySpace" << endl;
+                    for (DimensionSpace &l : i.boundrySpace)
                     {
-                        Quadtree a (this->dimension, l);
-                        this->subtrees.push_back(a);
-                        cout << "Created new quadtree!" << endl;
-                        a.insert(number);
+                        cout << l.start << "-" << l.end << endl;
+                    }*/
+                    this->subtrees.push_back(a);
+                    this->update(i);
+                    //i.printContent();
+                    cout << "Managed to update!!!" << endl;
+                    for(Quadtree &subtree : this->subtrees)
+                    {
+                        subtree.insert(number);
                     }
                 }
             }
@@ -255,9 +290,18 @@ void Quadtree::delete_element(vector<int> number)
 
 }
 
-void Quadtree::update()
+void Quadtree::update(QuadLeaf &leaf)
 {
-
+    if(leaf.used == true && !(this->subtrees.empty()))
+    {
+        //cout << "Get's into while" << endl;
+        for(Quadtree &subtree : this->subtrees)
+        {
+            //cout << "Managed to update!!!" << endl;
+            subtree.insert(leaf.contents);
+        }
+        leaf.contents.clear();
+    }
 }
 
 void Quadtree::kNN(vector<int> number)
