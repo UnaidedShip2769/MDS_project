@@ -22,8 +22,8 @@ int main()
     number5.push_back(24);
     number5.push_back(24);
     vector<int> number6;
-    number6.push_back(23);
-    number6.push_back(23);
+    number6.push_back(20);
+    number6.push_back(20);
 
     Quadtree quad1(2);
     quad1.insert(number);

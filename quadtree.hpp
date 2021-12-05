@@ -15,10 +15,10 @@ using namespace std;
 
 struct DimensionSpace
 {
-    int start;
-    int end;
+    float start;
+    float end;
 public:
-    DimensionSpace(int start, int end);
+    DimensionSpace(float start, float end);
     DimensionSpace() {};
 };
 

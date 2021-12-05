@@ -63,22 +63,12 @@ QuadNode::QuadNode(vector<int> numbers)
     this->contents = numbers;
 }
 
-//QuadLeaf::QuadLeaf(vector<int> numbers)
-//{
-//    this->contents = numbers;
-//}
-
 QuadLeaf::QuadLeaf(vector<DimensionSpace> boundrySpace)
 {
     this->boundrySpace = boundrySpace;
-    //for (DimensionSpace i : this->boundrySpace)
-   // {
-        //int median = (i.start + i.end) / 2;
-        //this->contents.push_back(median);
-    //}
 }
 
-DimensionSpace::DimensionSpace(int start, int end)
+DimensionSpace::DimensionSpace(float start, float end)
 {
     this->start = start;
     this-> end = end;
@@ -164,11 +154,11 @@ void Quadtree::print()
         }
     }
     cout << endl;
-    /*cout << "boundrySpace: " << endl;
+    cout << "boundrySpace: " << endl;
     for (DimensionSpace &i : this->boundrySpace)
     {
         cout << i.start << "-" << i.end << endl;
-    }*/
+    }
     for (QuadLeaf &j : this->head.leaves)
     {
         int k = 0;
@@ -256,27 +246,30 @@ void Quadtree::insert(vector<int> number)
                 }
                 else
                 {
-                    cout << "Splitting!!!" << endl;
-                    //vector<vector<DimensionSpace>> newVectorRanges = this->makeNewDimensionSpaces();
-                    //for(vector<DimensionSpace> l : newVectorRanges)
-                    //{
-                    //    Quadtree a (this->dimension, l);
-                    //    this->subtrees.push_back(a);
-                    //    cout << "Created new quadtree!" << endl;
-                    //}
-                    Quadtree a (this->dimension, i.boundrySpace);
-                    /*cout << "New boundrySpace" << endl;
-                    for (DimensionSpace &l : i.boundrySpace)
+                    if(this->subtrees.empty())
                     {
-                        cout << l.start << "-" << l.end << endl;
-                    }*/
-                    this->subtrees.push_back(a);
-                    this->update(i);
-                    //i.printContent();
-                    cout << "Managed to update!!!" << endl;
-                    for(Quadtree &subtree : this->subtrees)
+                        cout << "Splitting!!!" << endl;
+                        Quadtree a (this->dimension, i.boundrySpace);
+                        cout << "New boundrySpace" << endl;
+                        for (DimensionSpace &l : i.boundrySpace)
+                        {
+                            cout << l.start << "-" << l.end << endl;
+                        }
+                        this->subtrees.push_back(a);
+                        this->update(i);
+                        //i.printContent();
+                        cout << "Managed to update!!!" << endl;
+                        for(Quadtree &subtree : this->subtrees)
+                        {
+                            subtree.insert(number);
+                        }
+                    }
+                    else
                     {
-                        subtree.insert(number);
+                        for(Quadtree &subtree : this->subtrees)
+                        {
+                            subtree.insert(number);
+                        }
                     }
                 }
             }
@@ -297,7 +290,6 @@ void Quadtree::update(QuadLeaf &leaf)
         //cout << "Get's into while" << endl;
         for(Quadtree &subtree : this->subtrees)
         {
-            //cout << "Managed to update!!!" << endl;
             subtree.insert(leaf.contents);
         }
         leaf.contents.clear();
