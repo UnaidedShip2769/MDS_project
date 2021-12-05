@@ -25,7 +25,7 @@ public:
 struct QuadLeaf
 {
     bool used = false;
-    vector<int> contents;
+    vector<float> contents;
     QuadLeaf() {};
     //QuadLeaf(vector<int> numbers);
     QuadLeaf(vector<DimensionSpace> boundrySpace);
@@ -36,9 +36,9 @@ public:
 
 struct QuadNode
 {
-    vector<int> contents;
+    vector<float> contents;
     QuadNode() {};
-    QuadNode(vector<int> values);
+    QuadNode(vector<float> values);
     vector<QuadLeaf> leaves;
 };
 
@@ -54,7 +54,7 @@ public:
     Quadtree(int dimensions);
     void print();
     void print(QuadNode start);
-    void insert(vector<int> number);
+    void insert(vector<float> number);
     void delete_element(vector<int> number);
     void update(QuadLeaf &leaf);
     void kNN(vector<int> number);

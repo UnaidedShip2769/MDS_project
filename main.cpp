@@ -6,24 +6,24 @@
 
 int main()
 {
-    vector<int> number;
+    vector<float> number;
     number.push_back(1);
     number.push_back(1);
-    vector<int> number2;
+    vector<float> number2;
     number2.push_back(99);
     number2.push_back(99);
-    vector<int> number3;
+    vector<float> number3;
     number3.push_back(1);
     number3.push_back(99);
-    vector<int> number4;
+    vector<float> number4;
     number4.push_back(99);
     number4.push_back(1);
-    vector<int> number5;
+    vector<float> number5;
     number5.push_back(24);
     number5.push_back(24);
-    vector<int> number6;
-    number6.push_back(20);
-    number6.push_back(20);
+    vector<float> number6;
+    number6.push_back(23);
+    number6.push_back(23);
 
     Quadtree quad1(2);
     quad1.insert(number);

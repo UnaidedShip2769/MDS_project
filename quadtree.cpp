@@ -58,7 +58,7 @@ vector<vector<DimensionSpace>> Quadtree::makeNewDimensionSpaces()
     return newVectorRanges;
 };
 
-QuadNode::QuadNode(vector<int> numbers)
+QuadNode::QuadNode(vector<float> numbers)
 {
     this->contents = numbers;
 }
@@ -144,7 +144,7 @@ void Quadtree::print()
     //cout << "Printing!!!" << endl;
     cout << "QuadNode contents: ";
     int k = 0;
-    for(int &j : this->head.contents)
+    for(float &j : this->head.contents)
     {
         cout << j;
         k++;
@@ -198,7 +198,7 @@ void Quadtree::print()
     cout << endl << "------------" << endl << "End!" << endl << "------------" << endl;
 }*/
 
-void Quadtree::insert(vector<int> number)
+void Quadtree::insert(vector<float> number)
 {
     //cout << "Inserting!!" << endl;
     int j = 0;
