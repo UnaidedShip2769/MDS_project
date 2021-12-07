@@ -5,8 +5,6 @@
 #ifndef MDS_PROJECT_QUADTREE_HPP
 #define MDS_PROJECT_QUADTREE_HPP
 
-#endif //MDS_PROJECT_QUADTREE_HPP
-
 #include <iostream>
 #include <vector>
 #include <set>
@@ -59,3 +57,5 @@ public:
     void update(QuadLeaf &leaf);
     void kNN(vector<int> number);
 };
+
+#endif //MDS_PROJECT_QUADTREE_HPP
