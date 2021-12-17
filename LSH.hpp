@@ -10,10 +10,16 @@
 #include <string>
 using namespace std;
 
-vector<char> read_text(char* path);  //returns vector with the content of the file or '?' if error
-vector<set<string>>  Shingling(vector<char>text,int k);//return vector of vectors of k-shinles
-void  Merge (vector<set<string>> &v,set<string> &vocub);
-vector <vector<bool>> onehot_encode(vector<set<string>> &shingle,set<string>&vocub);
-vector<int> minHash(vector<bool> &onehot,int num);
-vector<vector<int>>minhash(vector<vector<bool>> &onehot,int num);
+
+///////minHash
+vector<string> get_files(char* path);
+bool rules(vector<char>&words);
+vector<vector<char>>get_words(string path);
+vector<vector<string>> Shingling(vector<vector<char>>&words,int k);
+vector<int>signats(vector<string>&s,vector<string>&vocub);
+vector<vector<int>>get_sig(vector<vector<string>>&shingles,vector<string>&vocub);
+
+//////similarity
+double DSC(vector<char> w1,vector<char> w2,vector<int>s1,vector<int>s2);
+double JaccardCoefficient(vector<char> w1,vector<char> w2,vector<int>s1,vector<int>s2);
 #endif //MDS_PROJECT_LSH_HPP

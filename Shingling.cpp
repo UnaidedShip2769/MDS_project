@@ -7,143 +7,117 @@
 #include <set>
 #include <queue>
 #include <iterator>
+#include <algorithm>
+#include "LSH.hpp"
+#include <string>
+#include <dirent.h>
+
 using namespace std;
-vector<set<string>>  Shingling(std::vector<char>text,int k){
-
-    //check if vector is corectly loaded
-    if ((text.size()==1&&text.at(0)=='?') || text.size()==0){
-        std::cout << "error loading vector";
+//namespace fs = std::filesystem;
+vector<string> get_files(char* path){
+    vector<string>files;
+    string temp;
+    DIR *dir;
+    struct dirent *ent;
+    if((dir = opendir(path))!=NULL){
+        while((ent= readdir(dir))!=NULL){
+            temp=path;
+            temp+='/';
+            temp+=ent->d_name;
+            files.push_back(temp);
+        }
+        closedir(dir);
+    }
+    else {
+        /* could not open directory */
+        perror ("could not open directory");
     }
 
+    return files;
+}
 
-
-
-
-    vector<set <string>> shingles;
-    set<string> temporary;
-    vector<char> temp ;
-    string tmp;
-    char space= ' ';
-    bool flag=false;
-    int itt=0;
-    for(int i =0;i<k;i++)
-        temp.push_back(text.at(i));
-    int i=k-1;
-    while(i<text.size()-k+1){
+vector<vector<string>> Shingling(vector<vector<char>>&words,int k){
+    vector<vector<string>> shingles;
+    vector<string> tmp;
+    string word;
+    for(int i=0;i<words.size();i++){
         tmp.clear();
-        for (int j=0;j<k;j++)
-            tmp=tmp+temp.at(j);
-
-        if(temp[k-1]==space){
-            //check if it is word with under k # of letters
-
-
-            if(temporary.size()==0){
-                //if so discard
-
-                temporary.clear();
+        for(int j=0;j<words.at(i).size()-k+1;j++){
+            word.clear();
+            for(int l=0;l<k;l++){
+                word=word+words.at(i).at(j+l);
             }
-
-
-
-            else{
-                //else discard and add new set to vector
-                itt++;
-
-                shingles.push_back(temporary);
-                temporary.clear();
-
-            }
-            i++;
-            for(int j =0;j<k;j++)
-
-                temp[j]=text.at(j+i);
-            i+=(k-1);
+            tmp.push_back(word);
         }
-        else{
-
-            temporary.insert(tmp);
-            i++;
-            for (int j=0;j<k-1;j++){
-                temp[j]=temp[j+1];
-            }
-
-            temp [k-1]=text.at(i);
-        }
-
+        shingles.push_back(tmp);
     }
-
     return shingles;
-
 }
 
-void Merge (vector<set<string>> &v, set<string> &vocub){
-
-    for (int i=0;i<v.size();i++){
-        vocub.insert(v.at(i).begin(),v.at(i).end());
-    }
-
-
+bool rules(vector<char>&words){
+    //set rules for keyword selection
+    int MinSize=4;
+    if(words.size()<MinSize)
+        return false;
+    return true;
 }
 
-vector<char> read_text(char* path){
-
-    vector<char> text;
-    ifstream File(path);
+vector<vector<char>>get_words(string path){
+    vector<vector<char>> words;
     char letter;
+    vector<char> tmp;
+    ifstream File(path);
     if (!File.is_open()) {
         cerr << "Could not open the file - '"
              << path << "'" << endl;
-        text.push_back('?');
-        return text;
+        return words;
     }
-
     while (File.get(letter)){
-        text.push_back(letter);
-    }
-
-
-}
-
-vector <vector<bool>> onehot_encode(vector<set<string>> &shingle,set<string>&vocub){
-    set<string>::iterator it,it1;
-    vector<bool> tmp(vocub.size(),0);
-    vector<vector<bool>> onehot(shingle.size(),tmp);
-    int i=0;
-    for(it=vocub.begin();it!=vocub.end();++it){
-
-        string tmp=*it;
-        for(int j=0;j<shingle.size();j++){
-            if(shingle.at(j).find(tmp)!=shingle.at(j).end())
-                onehot.at(j).at(i)=true;
+        if((letter==' ') || (letter=='\n') ||(letter=='-')||(letter==',')||(letter=='.')){
+            if(rules(tmp))
+                words.push_back(tmp);
+            tmp.clear();
         }
-
-        i++;
+        else
+            tmp.push_back(letter);
     }
-    return onehot;
-
+    return words;
 }
 
-vector<int> minHash(vector<bool> &onehot,int num){
-    vector <int>minHash(num,0);
-    int j=0;
-    for(int i=0;i<onehot.size();i++){
-        if(j>=num)
-            break;
-        if(onehot.at(i)==true){
-            minHash.at(j)=i;
-            j++;
+
+vector<vector<int>>get_sig(vector<vector<string>>&shingles,vector<string>&vocub){
+    vector<vector<int>>sigs;
+    vector<int> s;
+    for(int i=0;i<shingles.size();i++){
+        s= signats(shingles.at(i),vocub);
+        sigs.push_back(s);
+    }
+
+    return sigs;
+}
+vector<int>signats(vector<string>&s,vector<string>&vocub){
+    vector<int>sig;
+    string tmp;
+    int pos=-1;
+    for(int i=0;i<s.size();i++){
+        tmp=s.at(i);
+        for(int j=0;j<vocub.size();j++){
+            if(vocub.at(j)==tmp){
+                pos=j;
+                break;
+            }
+
         }
-
+        if(pos>=0){
+            sig.push_back(pos);
+            pos=-1;
+        }
+        else{
+            vocub.push_back(tmp);
+            sig.push_back(vocub.size()-1);
+        }
     }
-    return minHash;
+    return sig;
+
 }
 
-vector<vector<int>>minhash(vector<vector<bool>> &onehot,int num){
-    vector<vector<int>> minhash;
-    for (int i=0;i< onehot.size();i++){
-        minhash.push_back( minHash(onehot.at(i),num));
-    }
-    return minhash;
-}
-//compiles

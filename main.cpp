@@ -1,25 +1,26 @@
 #include <iostream>
 #include <vector>
-#include <set>
 #include "LSH.hpp"
 #include "KDtree.hpp"
 
 
 int main() {
-
     using namespace std;
-    vector<char> text= read_text("../data/test.txt");
-    vector<char> text2= read_text("../data/test2.txt");
-    vector<set<string>> s1= Shingling(text,3);
-    vector<set<string>> s2= Shingling(text2,3);
-    set<string> vocub;
-    vector<vector<bool>>onehot1;
+    char* direcory="../data";
+    vector<string>files= get_files(direcory);
+    vector<vector<char>> t = get_words(files.at(0));
 
-    Merge(s1,vocub);
-    Merge(s2,vocub);
-    onehot1= onehot_encode(s1,vocub);
+    vector<string>vocub;
+
+
+    vector<vector<string>> s1= Shingling(t,3);
+
+
+
+
+
     vector<vector<int>>min;
-    min= minhash(onehot1,2);
+    min= get_sig(s1,vocub);
 
 
     node* tree1=NULL;
