@@ -12,7 +12,8 @@ int main() {
 
 
     char* direcory="../data";
-    get_data(direcory,texts,3);
+    vector<string> textFileNames;
+    get_data(direcory,texts,3,textFileNames);
     //make_trees(direcory,trees,3,2);
 
 

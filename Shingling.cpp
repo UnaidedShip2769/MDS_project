@@ -189,15 +189,15 @@ void make_sign(vector<vector<vector<int>>> &sign, vector<string> &vocub, vector<
 //////interface type faction that calls all the above to  iterate
 //////thew all files and return them in signatures and add them to `text`
 
-void get_data(char* dir_path,vector<vector<vector<int>>>&sign,int k){
+void get_data(char* dir_path,vector<vector<vector<int>>>&sign,int k,vector<string> &textFileNames){
     vector<vector<vector<string>>>text;
-    vector<string>files= get_files(dir_path);
+    textFileNames= get_files(dir_path);
     vector<string>vocub;
     vector<vector<string>>shin;
 
     vector<vector<char>>words;
-    for(int i=0;i<files.size();i++){
-        words= get_words(files.at(i));
+    for(int i=0;i<textFileNames.size();i++){
+        words= get_words(textFileNames.at(i));
         shin= Shingling(words,k);
         text.push_back(shin);
         //sign= get_sig(shin,vocub);
