@@ -22,7 +22,10 @@ vector<string> get_files(char* path){
             temp=path;
             temp+='/';
             temp+=ent->d_name;
-            files.push_back(temp);
+            if(temp!="../data/.." && temp!="../data/.")
+            {
+                files.push_back(temp);
+            }
         }
         closedir(dir);
     }
