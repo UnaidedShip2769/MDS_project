@@ -22,10 +22,8 @@ vector<string> get_files(char* path){
             temp=path;
             temp+='/';
             temp+=ent->d_name;
-            if(temp!="../data/.." && temp!="../data/.")
-            {
+            if((temp!="../data/..")&&(temp!="../data/."))
                 files.push_back(temp);
-            }
         }
         closedir(dir);
     }
@@ -69,8 +67,6 @@ bool rules(vector<char>&words){
     return true;
 }
 vector<vector<char>>get_words(string path){
-    char symbols[]={' ','\n','-','!',',','.','?','>','<','_','@','$','%','^','&','*','(',')','{','}'};
-    int sym_size=sizeof(symbols)/sizeof(symbols[0]);
     bool flag =false;
     vector<vector<char>> words;
     char letter;
@@ -82,10 +78,9 @@ vector<vector<char>>get_words(string path){
         return words;
     }
     while (File.get(letter)){
-        for(int i=0;i<sym_size;i++){
-            if(symbols[i]==letter)
-                flag=true;
-        }
+        if(!(((letter>64)&&(letter<91))||((letter>96)&&(letter<123))))
+            flag=true;
+
         if(flag){
             if(rules(tmp))
                 words.push_back(tmp);
@@ -108,7 +103,6 @@ vector<vector<char>>get_words(string path){
 }
 vector<int>signats(vector<string>&s,vector<string>&vocub)
 {
-
     vector<int>sig;
     string tmp;
     int pos=-1;
@@ -119,7 +113,6 @@ vector<int>signats(vector<string>&s,vector<string>&vocub)
                 pos=j;
                 break;
             }
-
         }
         if(pos>=0){
             sig.push_back(pos);
@@ -131,17 +124,9 @@ vector<int>signats(vector<string>&s,vector<string>&vocub)
         }
     }
     return sig;
-
 }*/
 
-int hash_func(string s,int n){
-    int h=0;
-    for(int i=0;i<s.size();i++){
-        h+=int(s[i]);
-    }
-    h=h%n;
-    return h;
-}
+
 
 void make_vocub_and_shuffle(vector<string> &vocub, vector<vector<vector<string>>>&text)
 {
@@ -162,7 +147,7 @@ void make_vocub_and_shuffle(vector<string> &vocub, vector<vector<vector<string>>
                 }
                 //if(!alreadyExists)
                 //{
-                    vocub.push_back(shin);
+                vocub.push_back(shin);
                 //}
             }
         }
@@ -172,10 +157,12 @@ void make_vocub_and_shuffle(vector<string> &vocub, vector<vector<vector<string>>
     shuffle(vocub.begin(), vocub.end(), rng);
 }
 
-void make_sign(vector<vector<int>> &sign, vector<string> &vocub, vector<vector<vector<string>>> &text)
+void make_sign(vector<vector<vector<int>>> &sign, vector<string> &vocub, vector<vector<vector<string>>> &text)
 {
+    vector<vector<int>> s;
     for(vector<vector<string>> texts : text)
     {
+        s.clear();
         for(vector<string> word : texts)
         {
             vector<int> temp_sig;
@@ -192,24 +179,22 @@ void make_sign(vector<vector<int>> &sign, vector<string> &vocub, vector<vector<v
                     position++;
                 }
             }
-            /*for(int i : temp_sig)
-            {
-                cout << i << ",";
-            }
-            cout << endl;*/
-            sign.push_back(temp_sig);
+
+            s.push_back(temp_sig);
         }
+        sign.push_back(s);
     }
 }
 
 //////interface type faction that calls all the above to  iterate
 //////thew all files and return them in signatures and add them to `text`
 
-void get_data(char* dir_path,vector<vector<vector<string>>>&text,int k){
+void get_data(char* dir_path,vector<vector<vector<int>>>&sign,int k){
+    vector<vector<vector<string>>>text;
     vector<string>files= get_files(dir_path);
     vector<string>vocub;
     vector<vector<string>>shin;
-    vector<vector<int>>sign;
+
     vector<vector<char>>words;
     for(int i=0;i<files.size();i++){
         words= get_words(files.at(i));
@@ -248,9 +233,5 @@ void get_data(char* dir_path,vector<vector<vector<string>>>&text,int k){
             tree=insert(tree,t);
         }
         trees.push_back(tree);
-
-
     }
 }*/
-
-
