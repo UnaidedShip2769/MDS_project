@@ -8,6 +8,7 @@
 #include "LSH.hpp"
 #include <string>
 #include <dirent.h>
+#include <random>
 
 using namespace std;
 
@@ -47,6 +48,14 @@ vector<vector<string>> Shingling(vector<vector<char>>&words,int k){
         }
         shingles.push_back(tmp);
     }
+    /*for(vector<string> temp1 : shingles)
+    {
+        for(string temp2 : temp1)
+        {
+            cout << temp2 << " , ";
+        }
+        cout << endl;
+    }*/
     return shingles;
 }
 bool rules(vector<char>&words){
@@ -85,7 +94,7 @@ vector<vector<char>>get_words(string path){
     }
     return words;
 }
-vector<vector<int>>get_sig(vector<vector<string>>&shingles,vector<string>&vocub) {
+/*vector<vector<int>>get_sig(vector<vector<string>>&shingles,vector<string>&vocub) {
     vector<vector<int>> sigs;
     vector<int> s;
     for (int i = 0; i < shingles.size(); i++) {
@@ -120,7 +129,7 @@ vector<int>signats(vector<string>&s,vector<string>&vocub)
     }
     return sig;
 
-}
+}*/
 
 int hash_func(string s,int n){
     int h=0;
@@ -131,10 +140,69 @@ int hash_func(string s,int n){
     return h;
 }
 
+void make_vocub_and_shuffle(vector<string> &vocub, vector<vector<vector<string>>>&text)
+{
+    for(vector<vector<string>> texts : text)
+    {
+        for(vector<string> word : texts)
+        {
+            for(string shin : word)
+            {
+                //bool alreadyExists = false;
+                for(string shin_vocub : vocub)
+                {
+                    if (shin == shin_vocub)
+                    {
+                        //alreadyExists = true;
+                        break;
+                    }
+                }
+                //if(!alreadyExists)
+                //{
+                    vocub.push_back(shin);
+                //}
+            }
+        }
+    }
+    random_device rd;
+    default_random_engine rng(rd());
+    shuffle(vocub.begin(), vocub.end(), rng);
+}
+
+void make_sign(vector<vector<int>> &sign, vector<string> &vocub, vector<vector<vector<string>>> &text)
+{
+    for(vector<vector<string>> texts : text)
+    {
+        for(vector<string> word : texts)
+        {
+            vector<int> temp_sig;
+            for(string shin : word)
+            {
+                int position = 0;
+                for(string voc_shin : vocub)
+                {
+                    if(shin == voc_shin)
+                    {
+                        temp_sig.push_back(position);
+                        break;
+                    }
+                    position++;
+                }
+            }
+            /*for(int i : temp_sig)
+            {
+                cout << i << ",";
+            }
+            cout << endl;*/
+            sign.push_back(temp_sig);
+        }
+    }
+}
+
 //////interface type faction that calls all the above to  iterate
 //////thew all files and return them in signatures and add them to `text`
 
-void get_data(char* dir_path,vector<vector<vector<int>>>&text,int k){
+void get_data(char* dir_path,vector<vector<vector<string>>>&text,int k){
     vector<string>files= get_files(dir_path);
     vector<string>vocub;
     vector<vector<string>>shin;
@@ -143,12 +211,22 @@ void get_data(char* dir_path,vector<vector<vector<int>>>&text,int k){
     for(int i=0;i<files.size();i++){
         words= get_words(files.at(i));
         shin= Shingling(words,k);
-        sign= get_sig(shin,vocub);
-        text.push_back(sign);
-
+        text.push_back(shin);
+        //sign= get_sig(shin,vocub);
+        //text.push_back(sign);
     }
+    make_vocub_and_shuffle(vocub, text);
+    make_sign(sign, vocub, text);
+
 }
-void make_trees(char*dir_path,vector<node*>&trees,int l,int k){
+
+/*
+ * vectro<vector<vectro<string>>> shingle
+ * make_vocub(&)vector<string> suffle;
+ * shingle + vocub->vector<vector<vectro<int>>> sig
+ */
+
+/*void make_trees(char*dir_path,vector<node*>&trees,int l,int k){
     vector<string>files= get_files(dir_path);
     vector<string>vocub;
     vocub.resize(13000,"??");
@@ -170,6 +248,6 @@ void make_trees(char*dir_path,vector<node*>&trees,int l,int k){
 
 
     }
-}
+}*/
 
 

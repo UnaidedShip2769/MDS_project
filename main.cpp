@@ -6,12 +6,12 @@
 
 int main() {
     using namespace std;
-    vector<vector<vector<int>>>texts;
+    vector<vector<vector<string>>>texts;
     vector<node*>trees;
 
     char* direcory="../data";
     get_data(direcory,texts,3);
-    make_trees(direcory,trees,3,2);
+    //make_trees(direcory,trees,3,2);
 
 
 
