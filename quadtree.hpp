@@ -55,7 +55,7 @@ public:
     void insert(vector<float> number);
     void delete_element(vector<int> number);
     void update(QuadLeaf &leaf);
-    void kNN(vector<int> number);
+    vector<float> kNN(vector<float> number);
 };
 
 #endif //MDS_PROJECT_QUADTREE_HPP

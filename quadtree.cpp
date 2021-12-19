@@ -21,14 +21,14 @@ vector<vector<DimensionSpace>> Quadtree::makeNewDimensionSpaces()
         {
             if(j % (i+1) == 0)
             {
-            if(flag == false)
-            {
-                flag = true;
-            }
-            else if (flag == true)
-            {
-                flag = false;
-            }
+                if(flag == false)
+                {
+                    flag = true;
+                }
+                else if (flag == true)
+                {
+                    flag = false;
+                }
             }
             if (flag == false)
             {
@@ -296,7 +296,20 @@ void Quadtree::update(QuadLeaf &leaf)
     }
 }
 
-void Quadtree::kNN(vector<int> number)
+vector<float> Quadtree::kNN(vector<float> number)
 {
-
+    for(QuadLeaf leaf : this->head.leaves)
+    {
+        if(number == leaf.contents)
+        {
+            return leaf.contents;
+        }
+        else
+        {
+            for(Quadtree subtree : this->subtrees)
+            {
+                subtree.kNN(number);
+            }
+        }
+    }
 }
