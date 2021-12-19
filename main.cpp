@@ -6,8 +6,10 @@
 
 int main() {
     using namespace std;
-    vector<vector<vector<string>>>texts;
+    vector<vector<vector<int>>>texts;
     vector<node*>trees;
+
+
 
     char* direcory="../data";
     get_data(direcory,texts,3);

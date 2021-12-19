@@ -21,9 +21,9 @@ vector<vector<string>> Shingling(vector<vector<char>>&words,int k);
 //vector<vector<int>>get_sig(vector<vector<string>>&shingles,vector<string>&vocub);
 int hash_func(string s,int n);
 void make_vocub_and_shuffle(vector<string> &vocub, vector<vector<vector<string>>>&text);
-void make_sign(vector<vector<int>> &sigs, vector<string> &vocub, vector<vector<vector<string>>> &text);
+void make_sign(vector<vector<vector<int>>> &sigs, vector<string> &vocub, vector<vector<vector<string>>> &text);
 ///interface function
-void get_data(char* dir_path,vector<vector<vector<string>>>&text,int k);
+void get_data(char* dir_path,vector<vector<vector<int>>>&text,int k);
 //void make_trees(char*dir_path,vector<node*>&trees,int l,int k);
 
 //////similarity

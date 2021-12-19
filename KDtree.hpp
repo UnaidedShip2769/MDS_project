@@ -12,6 +12,7 @@ typedef struct KDtree_node{
     vector<int>coordinates;
     struct KDtree_node* left;
     struct KDtree_node* right;
+
 }node;
 
 ///insert
