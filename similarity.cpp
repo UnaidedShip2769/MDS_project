@@ -37,3 +37,4 @@ double DSC(vector<char> w1,vector<char> w2,vector<int>s1,vector<int>s2){
     return j1/j2;
 
 }
+

@@ -81,6 +81,12 @@ vector<vector<char>>get_words(string path){
         if(!(((letter>64)&&(letter<91))||((letter>96)&&(letter<123))))
             flag=true;
 
+
+        if((letter>96)&&(letter<123)){
+            letter-=32;
+        }
+
+
         if(flag){
             if(rules(tmp))
                 words.push_back(tmp);
@@ -130,6 +136,44 @@ vector<int>signats(vector<string>&s,vector<string>&vocub)
 
 void make_vocub_and_shuffle(vector<string> &vocub, vector<vector<vector<string>>>&text)
 {
+
+    for(vector<vector<string>> texts : text)
+    {
+        for(vector<string> word : texts)
+        {
+            for(string shin : word)
+            {
+                int pos=0;
+                bool alreadyExists = false;
+
+                for(string shin_vocub : vocub)
+                {
+
+                    if (shin == shin_vocub)
+                    {
+                        alreadyExists = true;
+                        break;
+                    }
+                    else if(shin.at(0)<shin_vocub.at(0))
+                        break;
+
+
+
+
+                    pos++;
+                }
+                if(!alreadyExists){
+                    vocub.insert(vocub.begin()+pos,shin);
+                }
+
+            }
+        }
+    }
+
+}
+
+void make_vocub_and_order_alphabetically(vector<string> &vocub, vector<vector<vector<string>>>&text)
+{
     for(vector<vector<string>> texts : text)
     {
         for(vector<string> word : texts)
@@ -137,24 +181,31 @@ void make_vocub_and_shuffle(vector<string> &vocub, vector<vector<vector<string>>
             for(string shin : word)
             {
                 //bool alreadyExists = false;
+                int pos = 0;
                 for(string shin_vocub : vocub)
                 {
-                    if (shin == shin_vocub)
+                    if(shin.at(0) > shin_vocub.at(0))
                     {
-                        //alreadyExists = true;
-                        break;
+                        pos++;
+                    }
+                    else
+                    {
+                        if(shin == shin_vocub)
+                        {
+                            pos = 0;
+                            break;
+                        }
+                        else
+                        {
+                            vocub.insert(vocub.begin()+pos, shin);
+                            pos = 0;
+                            break;
+                        }
                     }
                 }
-                //if(!alreadyExists)
-                //{
-                vocub.push_back(shin);
-                //}
             }
         }
     }
-    random_device rd;
-    default_random_engine rng(rd());
-    shuffle(vocub.begin(), vocub.end(), rng);
 }
 
 void make_sign(vector<vector<vector<int>>> &sign, vector<string> &vocub, vector<vector<vector<string>>> &text)
@@ -189,10 +240,9 @@ void make_sign(vector<vector<vector<int>>> &sign, vector<string> &vocub, vector<
 //////interface type faction that calls all the above to  iterate
 //////thew all files and return them in signatures and add them to `text`
 
-void get_data(char* dir_path,vector<vector<vector<int>>>&sign,int k,vector<string> &textFileNames){
+void get_data(char* dir_path,vector<vector<vector<int>>>&sign,int k,vector<string> &textFileNames,vector<string>&vocub){
     vector<vector<vector<string>>>text;
     textFileNames= get_files(dir_path);
-    vector<string>vocub;
     vector<vector<string>>shin;
 
     vector<vector<char>>words;
@@ -204,6 +254,7 @@ void get_data(char* dir_path,vector<vector<vector<int>>>&sign,int k,vector<strin
         //text.push_back(sign);
     }
     make_vocub_and_shuffle(vocub, text);
+    //make_vocub_and_order_alphabetically(vocub,text);
     make_sign(sign, vocub, text);
 
 }
@@ -235,3 +286,18 @@ void get_data(char* dir_path,vector<vector<vector<int>>>&sign,int k,vector<strin
         trees.push_back(tree);
     }
 }*/
+void make_KD_trees(vector<vector<vector<int>>>&sign,vector<node*>&trees,int k){
+    //vector<string> textFileNames not needed
+    node* tree;
+    for(vector<vector<int>> file_signs : sign)
+    {
+        tree = NULL;
+        for(vector<int> sig : file_signs)
+        {
+            vector<int> t = sig;
+            t.resize(k,0);
+            tree=insert(tree,t);
+        }
+        trees.push_back(tree);
+    }
+}
