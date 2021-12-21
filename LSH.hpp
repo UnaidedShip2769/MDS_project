@@ -26,7 +26,12 @@ void make_sign(vector<vector<vector<int>>> &sigs, vector<string> &vocub, vector<
 ///interface function
 void get_data(char* dir_path,vector<vector<vector<int>>>&text,int k,vector<string>&files,vector<string> &textFileNames);
 void make_KD_trees(vector<vector<vector<int>>>&sign,vector<node*>&trees,int k);
+void update_vocub(vector<string> &vocub, vector<string> &secondaryVocub, vector<string>&shingles);
+vector<int> get_word_data(string &word, int k, vector<string> &vocub, vector<string> &secondaryVocub);
+vector<string> word_Shingling(string &word, int k);
+void make_word_sign(vector<int> &sign, vector<string> &vocub, vector<string> &secondaryVocub, vector<string> shingles);
 //void make_trees(char*dir_path,vector<node*>&trees,int l,int k);
+
 
 //////similarity
 double DSC(vector<char> w1,vector<char> w2,vector<int>s1,vector<int>s2);

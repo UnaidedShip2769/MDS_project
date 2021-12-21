@@ -82,8 +82,8 @@ vector<vector<char>>get_words(string path){
             flag=true;
 
 
-        if((letter>96)&&(letter<123)){
-            letter-=32;
+        if((letter>64)&&(letter<91)){
+            letter+=32;
         }
 
 
@@ -98,39 +98,7 @@ vector<vector<char>>get_words(string path){
     }
     return words;
 }
-/*vector<vector<int>>get_sig(vector<vector<string>>&shingles,vector<string>&vocub) {
-    vector<vector<int>> sigs;
-    vector<int> s;
-    for (int i = 0; i < shingles.size(); i++) {
-        s = signats(shingles.at(i), vocub);
-        sigs.push_back(s);
-    }
-    return sigs;
-}
-vector<int>signats(vector<string>&s,vector<string>&vocub)
-{
-    vector<int>sig;
-    string tmp;
-    int pos=-1;
-    for(int i=0;i<s.size();i++){
-        tmp=s.at(i);
-        for(int j=0;j<vocub.size();j++){
-            if(vocub.at(j)==tmp){
-                pos=j;
-                break;
-            }
-        }
-        if(pos>=0){
-            sig.push_back(pos);
-            pos=-1;
-        }
-        else{
-            vocub.push_back(tmp);
-            sig.push_back(vocub.size()-1);
-        }
-    }
-    return sig;
-}*/
+
 
 
 
@@ -259,6 +227,103 @@ void get_data(char* dir_path,vector<vector<vector<int>>>&sign,int k,vector<strin
 
 }
 
+
+void make_KD_trees(vector<vector<vector<int>>>&sign,vector<node*>&trees,int k){
+    //vector<string> textFileNames not needed
+    node* tree;
+    for(vector<vector<int>> file_signs : sign)
+    {
+        tree = NULL;
+        for(vector<int> sig : file_signs)
+        {
+            vector<int> t = sig;
+            t.resize(k,0);
+            tree=insert(tree,t);
+        }
+        trees.push_back(tree);
+    }
+}
+
+vector<string> word_Shingling(string &word, int k)
+{
+    vector<string> shingles;
+    string temp_word;
+    for(int i=0; i<word.size()-k+1; i++)
+    {
+        temp_word.clear();
+        for(int j=0; j<k; j++)
+        {
+            temp_word=temp_word+word.at(i+j);
+        }
+        shingles.push_back(temp_word);
+    }
+    return shingles;
+}
+
+void update_vocub(vector<string> &vocub, vector<string> &secondaryVocub, vector<string>&shingles)
+{
+    for(string shin : shingles)
+    {
+        bool alreadyExists = false;
+        for(string shin_vocub : vocub)
+        {
+            if (shin == shin_vocub)
+            {
+                alreadyExists = true;
+                break;
+            }
+            else if(shin.at(0)<shin_vocub.at(0))
+                break;
+        }
+        if(!alreadyExists)
+        {
+            secondaryVocub.push_back(shin);
+        }
+    }
+}
+
+void make_word_sign(vector<int> &sign, vector<string> &vocub, vector<string> &secondaryVocub, vector<string> shingles)
+{
+    for(string shin : shingles)
+    {
+
+        int position = 0;
+        for(string voc_shin : vocub)
+        {
+            if(shin == voc_shin)
+            {
+                sign.push_back(position);
+                break;
+            }
+            else if(shin.at(0) < voc_shin.at(0))
+            {
+                int sec_position = 0;
+                for(string secvoc_shin: secondaryVocub)
+                {
+                    if(shin == secvoc_shin) {
+                        sign.push_back(sec_position + vocub.size());
+                        break;
+                    }
+                    sec_position++;
+                }
+                break;
+            }
+            position++;
+        }
+    }
+}
+
+vector<int> get_word_data(string &word, int k, vector<string> &vocub, vector<string> &secondaryVocub)
+{
+    vector<string> shingles = word_Shingling(word,3);
+    update_vocub(vocub, secondaryVocub, shingles);
+    vector<int> signatures;
+    make_word_sign(signatures,vocub,secondaryVocub,shingles);
+    return signatures;
+
+}
+
+
 /*
  * vectro<vector<vectro<string>>> shingle
  * make_vocub(&)vector<string> suffle;
@@ -286,18 +351,36 @@ void get_data(char* dir_path,vector<vector<vector<int>>>&sign,int k,vector<strin
         trees.push_back(tree);
     }
 }*/
-void make_KD_trees(vector<vector<vector<int>>>&sign,vector<node*>&trees,int k){
-    //vector<string> textFileNames not needed
-    node* tree;
-    for(vector<vector<int>> file_signs : sign)
-    {
-        tree = NULL;
-        for(vector<int> sig : file_signs)
-        {
-            vector<int> t = sig;
-            t.resize(k,0);
-            tree=insert(tree,t);
-        }
-        trees.push_back(tree);
+/*vector<vector<int>>get_sig(vector<vector<string>>&shingles,vector<string>&vocub) {
+    vector<vector<int>> sigs;
+    vector<int> s;
+    for (int i = 0; i < shingles.size(); i++) {
+        s = signats(shingles.at(i), vocub);
+        sigs.push_back(s);
     }
+    return sigs;
 }
+vector<int>signats(vector<string>&s,vector<string>&vocub)
+{
+    vector<int>sig;
+    string tmp;
+    int pos=-1;
+    for(int i=0;i<s.size();i++){
+        tmp=s.at(i);
+        for(int j=0;j<vocub.size();j++){
+            if(vocub.at(j)==tmp){
+                pos=j;
+                break;
+            }
+        }
+        if(pos>=0){
+            sig.push_back(pos);
+            pos=-1;
+        }
+        else{
+            vocub.push_back(tmp);
+            sig.push_back(vocub.size()-1);
+        }
+    }
+    return sig;
+}*/
