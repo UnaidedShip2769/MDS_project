@@ -7,28 +7,22 @@
 #include "KDtree.hpp"
 #include "Interface.hpp"
 using namespace std;
-/*
-int Interface(){
 
-    char* dir;
-    int shingle_size;
-    int dimensions;
+int Interface(vector<node*>&trees,vector<string> &textFileNames){
 
-    vector<vector<vector<int>>>texts;
-    vector<node*>trees;
-    int init_status= Init(texts,trees,"../data",3,2);
+    char* direcory="../data";
+    int shingle_size=3;
+    int dimensions=2;
 
+    vector<vector<vector<int>>>sign;
+    vector<string>vocub;
 
+    get_data(direcory,sign,shingle_size,textFileNames,vocub);
+
+    make_KD_trees(sign,trees,dimensions);///switch statement here to select between different trees
 
 
 }
 
-int Init(vector<vector<vector<int>>>&texts,vector<node*>&trees,char* dir,int shingle_size,int dimensions){
 
-    vector<string> textFileNames;
-    get_data(dir,texts,shingle_size,textFileNames);
-    make_KD_trees(texts,trees,dimensions);
 
-    return 0;
-}
-*/

@@ -10,6 +10,5 @@
 #include <string>
 #include "KDtree.hpp"
 using namespace std;
-int Init(vector<vector<vector<int>>>&texts,vector<node*>&trees,char* dir,int shingle_size,int dimensions);
-int Interface();
+int Interface(vector<node*>&trees,vector<string> &textFileNames);
 #endif //MDS_PROJECT_INTERFACE_HPP
