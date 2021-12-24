@@ -33,6 +33,7 @@ node* insert(node* root,vector<int> point){
 }
 
 node* createNode(vector<int>point){
+
     node* tmp=new node;
     for(int i=0;i<point.size();i++)
         tmp->coordinates.push_back(point.at(i));
@@ -95,11 +96,11 @@ node* findMin(node* root,int d,int depth){
     }
     node* tmpR=findMin(root->right,d,depth+1);
     if((root->coordinates.at(d)<tmpL->coordinates.at(d))&&
-    (root->coordinates.at(d)<tmpR->coordinates.at(d))){
+       (root->coordinates.at(d)<tmpR->coordinates.at(d))){
         return root;
     }
     else if((tmpL->coordinates.at(d)<tmpR->coordinates.at(d))&&
-    (tmpL->coordinates.at(d)<root->coordinates.at(d))){
+            (tmpL->coordinates.at(d)<root->coordinates.at(d))){
         return tmpL;
     }
     else
@@ -135,13 +136,19 @@ node* closest(node* n1,node* n2,node* point){
     else
         return n2;
 }
-node* NNsearch(node* root,node* point,int depth){
-    if (root==NULL)
-        return NULL;
 
+node* NN_search(node* root,node* point,int depth){
+    cout<<"peri";
+
+    if(root==NULL)
+        return NULL;
+    point->coordinates.resize(root->coordinates.size(),0);
     node* nextBranch=NULL;
     node* otherBranch=NULL;
     int d=depth%point->coordinates.size();
+    node* best=NULL;
+    node* tmp=NULL;
+
 
     if(point->coordinates.at(d)<root->coordinates.at(d)){
         nextBranch=root->left;
@@ -151,16 +158,18 @@ node* NNsearch(node* root,node* point,int depth){
         nextBranch=root->right;
         otherBranch=root->left;
     }
-    node* tmp= NNsearch(nextBranch,point,depth+1);
-    node* best= closest(tmp,best,point);
+    if(nextBranch==NULL)
+        return root;
+    tmp= NN_search(nextBranch,point,depth+1);
+    best= closest(tmp,root,point);
 
     double radius=dist(best,point);
     double distance=point->coordinates.at(d)-root->coordinates.at(d);
-
-    if(radius>=distance*distance){
-        tmp= NNsearch(otherBranch,point,depth+1);
-        best= closest(tmp,best,point);
+    if(radius>distance*distance){
+        if(otherBranch==NULL)
+            return root;
+        tmp= NN_search(otherBranch,point,depth+1);
+        best= closest(tmp,root,point);
     }
-
-
+    return best;
 }

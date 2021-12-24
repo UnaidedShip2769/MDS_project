@@ -22,14 +22,14 @@ void make_vocub_and_order_alphabetically(vector<string> &vocub, vector<vector<ve
 //vector<vector<int>>get_sig(vector<vector<string>>&shingles,vector<string>&vocub);
 int hash_func(string s,int n);
 void make_vocub_and_shuffle(vector<string> &vocub, vector<vector<vector<string>>>&text);
-void make_sign(vector<vector<vector<int>>> &sigs, vector<string> &vocub, vector<vector<vector<string>>> &text);
+void make_sign(vector<vector<vector<int>>> &sigs, set<string> &vocub, vector<vector<vector<string>>> &text);
 ///interface function
-void get_data(char* dir_path,vector<vector<vector<int>>>&text,int k,vector<string>&files,vector<string> &textFileNames);
+void get_data(char* dir_path,vector<vector<vector<int>>>&text,int k,vector<string>&textFileNames,set<string> &vocub);
 void make_KD_trees(vector<vector<vector<int>>>&sign,vector<node*>&trees,int k);
-void update_vocub(vector<string> &vocub, vector<string> &secondaryVocub, vector<string>&shingles);
-vector<int> get_word_data(string &word, int k, vector<string> &vocub, vector<string> &secondaryVocub);
+void update_vocub(set<string> &vocub, vector<string> &secondaryVocub, vector<string>&shingles);
+vector<int> get_word_data(string &word, int k, set<string> &vocub, vector<string> &secondaryVocub);
 vector<string> word_Shingling(string &word, int k);
-void make_word_sign(vector<int> &sign, vector<string> &vocub, vector<string> &secondaryVocub, vector<string> shingles);
+void make_word_sign(vector<int> &sign, set<string> &vocub, vector<string> &secondaryVocub, vector<string> shingles);
 //void make_trees(char*dir_path,vector<node*>&trees,int l,int k);
 
 

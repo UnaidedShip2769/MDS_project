@@ -100,8 +100,53 @@ vector<vector<char>>get_words(string path){
 }
 
 
+/*int bin_vocub_search(vector<string> &vocub,int l,int r,string shin,int letter){
+    if(r>=l){
+        int mid=l+(r-l)/2;
+        if(vocub.at(mid)==shin)
+            return -1;
+        if(vocub.at(mid).at(letter)==shin.at(letter)){
+            while(vocub.at(mid).at(letter)==shin.at(letter)){
+                mid--;
+                if(vocub.at(mid)==shin)
+                    return -1;
+            }
 
+            return bin_vocub_search(vocub,mid,r,shin,letter+1);
+        }
+        if(vocub.at(mid).at(letter)>shin.at(letter)){
+            return bin_vocub_search(vocub,l,mid-1,shin,letter);
+        }
+    }
+}
+void make_vocub(vector<string> &vocub, vector<vector<vector<string>>>&text){
+    for(vector<vector<string>> texts : text){
+        for(vector<string> word : texts){
+            for(string shin : word){
+                if(vocub.size()==0)
+                    vocub.push_back(shin);
+                else{
+                    ////search for the place to insert the word
+                    int letter=0;
+                    int tmp=vocub.size()/2;
+                    if(vocub.at(tmp).at(letter)>shin.at(letter)){
 
+                    }
+                }
+            }
+        }
+    }
+}*/
+
+void make_vocub(set<string>&vocub,vector<vector<vector<string>>>&text){
+    for(vector<vector<string>> texts : text) {
+        for (vector<string> word: texts) {
+            for (string shin: word) {
+                vocub.insert(shin);
+            }
+        }
+    }
+}
 void make_vocub_and_shuffle(vector<string> &vocub, vector<vector<vector<string>>>&text)
 {
 
@@ -130,53 +175,32 @@ void make_vocub_and_shuffle(vector<string> &vocub, vector<vector<vector<string>>
 
                     pos++;
                 }
-                if(!alreadyExists){
-                    vocub.insert(vocub.begin()+pos,shin);
-                }
-
-            }
-        }
-    }
-
-}
-
-void make_vocub_and_order_alphabetically(vector<string> &vocub, vector<vector<vector<string>>>&text)
-{
-    for(vector<vector<string>> texts : text)
-    {
-        for(vector<string> word : texts)
-        {
-            for(string shin : word)
-            {
-                //bool alreadyExists = false;
-                int pos = 0;
-                for(string shin_vocub : vocub)
-                {
-                    if(shin.at(0) > shin_vocub.at(0))
-                    {
+                if(!alreadyExists){///insted of insterting order to the second letter
+                    alreadyExists= false;
+                    for(string shin_vocub : vocub){
+                        if(shin == shin_vocub){
+                            alreadyExists=true;
+                            break;
+                        }
+                        else if(shin.at(1)<shin_vocub.at(1))
+                            break;
                         pos++;
+
                     }
-                    else
-                    {
-                        if(shin == shin_vocub)
-                        {
-                            pos = 0;
-                            break;
-                        }
-                        else
-                        {
-                            vocub.insert(vocub.begin()+pos, shin);
-                            pos = 0;
-                            break;
-                        }
+                    if(!alreadyExists){
+                        vocub.insert(vocub.begin()+pos,shin);
                     }
                 }
+
             }
         }
     }
+
 }
 
-void make_sign(vector<vector<vector<int>>> &sign, vector<string> &vocub, vector<vector<vector<string>>> &text)
+
+
+void make_sign(vector<vector<vector<int>>> &sign,set<string> &vocub, vector<vector<vector<string>>> &text)
 {
     vector<vector<int>> s;
     for(vector<vector<string>> texts : text)
@@ -208,7 +232,7 @@ void make_sign(vector<vector<vector<int>>> &sign, vector<string> &vocub, vector<
 //////interface type faction that calls all the above to  iterate
 //////thew all files and return them in signatures and add them to `text`
 
-void get_data(char* dir_path,vector<vector<vector<int>>>&sign,int k,vector<string> &textFileNames,vector<string>&vocub){
+void get_data(char* dir_path,vector<vector<vector<int>>>&sign,int k,vector<string> &textFileNames,set<string>&vocub){
     vector<vector<vector<string>>>text;
     textFileNames= get_files(dir_path);
     vector<vector<string>>shin;
@@ -221,7 +245,7 @@ void get_data(char* dir_path,vector<vector<vector<int>>>&sign,int k,vector<strin
         //sign= get_sig(shin,vocub);
         //text.push_back(sign);
     }
-    make_vocub_and_shuffle(vocub, text);
+    make_vocub(vocub, text);
     //make_vocub_and_order_alphabetically(vocub,text);
     make_sign(sign, vocub, text);
 
@@ -260,7 +284,7 @@ vector<string> word_Shingling(string &word, int k)
     return shingles;
 }
 
-void update_vocub(vector<string> &vocub, vector<string> &secondaryVocub, vector<string>&shingles)
+void update_vocub(set<string> &vocub, vector<string> &secondaryVocub, vector<string>&shingles)
 {
     for(string shin : shingles)
     {
@@ -282,7 +306,7 @@ void update_vocub(vector<string> &vocub, vector<string> &secondaryVocub, vector<
     }
 }
 
-void make_word_sign(vector<int> &sign, vector<string> &vocub, vector<string> &secondaryVocub, vector<string> shingles)
+void make_word_sign(vector<int> &sign, set<string> &vocub, vector<string> &secondaryVocub, vector<string> shingles)
 {
     for(string shin : shingles)
     {
@@ -313,7 +337,7 @@ void make_word_sign(vector<int> &sign, vector<string> &vocub, vector<string> &se
     }
 }
 
-vector<int> get_word_data(string &word, int k, vector<string> &vocub, vector<string> &secondaryVocub)
+vector<int> get_word_data(string &word, int k, set<string> &vocub, vector<string> &secondaryVocub)
 {
     vector<string> shingles = word_Shingling(word,3);
     update_vocub(vocub, secondaryVocub, shingles);
@@ -324,63 +348,3 @@ vector<int> get_word_data(string &word, int k, vector<string> &vocub, vector<str
 }
 
 
-/*
- * vectro<vector<vectro<string>>> shingle
- * make_vocub(&)vector<string> suffle;
- * shingle + vocub->vector<vector<vectro<int>>> sig
- */
-
-/*void make_trees(char*dir_path,vector<node*>&trees,int l,int k){
-    vector<string>files= get_files(dir_path);
-    vector<string>vocub;
-    vocub.resize(13000,"??");
-    vector<vector<string>>shin;
-    vector<vector<int>>sign;
-    vector<vector<char>>words;
-    node* tree;
-    for(int i=0;i<files.size();i++){
-        tree=NULL;
-        words= get_words(files.at(i));
-        shin= Shingling(words,l);
-        sign= get_sig(shin,vocub);
-        for(int i=0;i<sign.size();i++){
-            vector<int> t=sign.at(i);
-            t.resize(k);
-            tree=insert(tree,t);
-        }
-        trees.push_back(tree);
-    }
-}*/
-/*vector<vector<int>>get_sig(vector<vector<string>>&shingles,vector<string>&vocub) {
-    vector<vector<int>> sigs;
-    vector<int> s;
-    for (int i = 0; i < shingles.size(); i++) {
-        s = signats(shingles.at(i), vocub);
-        sigs.push_back(s);
-    }
-    return sigs;
-}
-vector<int>signats(vector<string>&s,vector<string>&vocub)
-{
-    vector<int>sig;
-    string tmp;
-    int pos=-1;
-    for(int i=0;i<s.size();i++){
-        tmp=s.at(i);
-        for(int j=0;j<vocub.size();j++){
-            if(vocub.at(j)==tmp){
-                pos=j;
-                break;
-            }
-        }
-        if(pos>=0){
-            sig.push_back(pos);
-            pos=-1;
-        }
-        else{
-            vocub.push_back(tmp);
-            sig.push_back(vocub.size()-1);
-        }
-    }
-    return sig;
-}*/

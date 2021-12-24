@@ -1,7 +1,3 @@
-//
-// Created by peri on 7/12/21.
-//
-
 #ifndef MDS_PROJECT_KDTREE_HPP
 #define MDS_PROJECT_KDTREE_HPP
 #include <vector>
@@ -32,6 +28,6 @@ node* Min(node* root,int d);
 ///NNsearch
 double dist(node* n1,node* n2);
 node* closest(node* n1,node* n2,node* point);
-node* NNsearch(node* root,node* point,int depth);
+node* NN_search(node* root,node* point,int depth);
 
 #endif //MDS_PROJECT_KDTREE_HPP

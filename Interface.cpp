@@ -15,7 +15,7 @@ int Interface(vector<node*>&trees,vector<string> &textFileNames){
     int dimensions=2;
 
     vector<vector<vector<int>>>sign;
-    vector<string>vocub;
+    set<string>vocub;
 
 
     get_data(direcory,sign,shingle_size,textFileNames,vocub);
@@ -27,7 +27,9 @@ int Interface(vector<node*>&trees,vector<string> &textFileNames){
     cin>>word;
     vector<string>sec_vocub;
     vector<int>word_shingle=get_word_data(word,3,vocub,sec_vocub);
-    node* point= search(trees.at(0),word_shingle);
+    node* n= createNode(word_shingle);
+    node* point= NN_search(trees.at(0), n,0);
+    cout<<"lkajdf;lkajsdjsdaff";
 
 }
 
