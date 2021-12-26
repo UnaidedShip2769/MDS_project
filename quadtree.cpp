@@ -7,6 +7,7 @@
 #include <vector>
 #include <iterator>
 #include <math.h>
+#include <stack>
 
 using namespace std;
 
@@ -52,7 +53,6 @@ vector<vector<DimensionSpace>> Quadtree::makeNewDimensionSpaces()
             DimensionSpace a (newRanges[j][i].start, newRanges[j][i].end);
             b.push_back(a);
         }
-        cout << endl;
         newVectorRanges.push_back(b);
     }
     return newVectorRanges;
@@ -236,11 +236,11 @@ void Quadtree::insert(vector<float> number)
                 if(i.used == false)
                 {
                     i.used = true;
-                    cout << "Found empty contents" << endl;
+                    //cout << "Found empty contents" << endl;
                     //i.contents = number;
                     for (int num : number)
                     {
-                        cout << "Pushing back number" << endl;
+                        //cout << "Pushing back number" << endl;
                         this->head.leaves.at(leafnum).contents.push_back(num);
                     }
                 }
@@ -248,17 +248,17 @@ void Quadtree::insert(vector<float> number)
                 {
                     if(this->subtrees.empty())
                     {
-                        cout << "Splitting!!!" << endl;
+                        //cout << "Splitting!!!" << endl;
                         Quadtree a (this->dimension, i.boundrySpace);
-                        cout << "New boundrySpace" << endl;
-                        for (DimensionSpace &l : i.boundrySpace)
+                        //cout << "New boundrySpace" << endl;
+                        /*for (DimensionSpace &l : i.boundrySpace)
                         {
                             cout << l.start << "-" << l.end << endl;
-                        }
+                        }*/
                         this->subtrees.push_back(a);
                         this->update(i);
                         //i.printContent();
-                        cout << "Managed to update!!!" << endl;
+                        //cout << "Managed to update!!!" << endl;
                         for(Quadtree &subtree : this->subtrees)
                         {
                             subtree.insert(number);
@@ -296,20 +296,59 @@ void Quadtree::update(QuadLeaf &leaf)
     }
 }
 
-vector<float> Quadtree::kNN(vector<float> number)
+float distance(QuadNode node, vector<float> searchNumber, int dimension)
 {
-    for(QuadLeaf leaf : this->head.leaves)
+
+    float result = 0;
+    for(int i = 0; i < dimension; i++)
     {
-        if(number == leaf.contents)
+        result += pow(searchNumber.at(i) - node.contents.at(i), 2);
+    }
+    result = sqrt(result);
+    return result;
+}
+
+float distance(QuadLeaf leaf, vector<float> searchNumber, int dimension)
+{
+
+    float result = 0;
+    for(int i = 0; i < dimension; i++)
+    {
+        result += pow(searchNumber.at(i) - leaf.contents.at(i), 2);
+    }
+    result = sqrt(result);
+    return result;
+}
+
+vector<float> Quadtree::NN(vector<float> searchNumber)
+{
+
+    float r = 50;
+    QuadLeaf result;
+    stack<Quadtree> searchStack;
+    searchStack.push(*this);
+    while(!searchStack.empty())
+    {
+        Quadtree tempTree = searchStack.top();
+        searchStack.pop();
+        for(Quadtree tempChild : tempTree.subtrees)
         {
-            return leaf.contents;
-        }
-        else
-        {
-            for(Quadtree subtree : this->subtrees)
+            if(distance(tempChild.head, searchNumber, this->dimension) < r)
             {
-                subtree.kNN(number);
+                searchStack.push(tempChild);
+            }
+        }
+        for(QuadLeaf tempLeaf : tempTree.head.leaves)
+        {
+            if(!tempLeaf.contents.empty())
+            {
+                if(distance(tempLeaf, searchNumber, this->dimension) < r)
+                {
+                    r = distance(tempLeaf, searchNumber, this->dimension);
+                    result = tempLeaf;
+                }
             }
         }
     }
+    return result.contents;
 }

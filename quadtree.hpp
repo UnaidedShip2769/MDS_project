@@ -8,6 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <set>
+#include <stack>
 
 using namespace std;
 
@@ -55,7 +56,10 @@ public:
     void insert(vector<float> number);
     void delete_element(vector<int> number);
     void update(QuadLeaf &leaf);
-    vector<float> kNN(vector<float> number);
+    vector<float> NN(vector<float> number);
 };
+
+float distance(QuadLeaf leaf, float searchNumber, int dimension);
+float distance(QuadNode node, float searchNumber, int dimension);
 
 #endif //MDS_PROJECT_QUADTREE_HPP

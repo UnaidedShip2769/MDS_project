@@ -3,6 +3,7 @@
 #include <set>
 #include "LSH.hpp"
 #include "quadtree.hpp"
+#include <stack>
 
 int main()
 {
@@ -24,6 +25,9 @@ int main()
     vector<float> number6;
     number6.push_back(23);
     number6.push_back(23);
+    vector<float>number7;
+    number7.push_back(22);
+    number7.push_back(22);
 
     Quadtree quad1(2);
     quad1.insert(number);
@@ -32,7 +36,12 @@ int main()
     quad1.insert(number4);
     quad1.insert(number5);
     quad1.insert(number6);
-    quad1.print();
+    vector<float> result = quad1.NN(number7);
+    for(float number : result)
+    {
+        cout << number << " ";
+    }
+    //quad1.print();
 
     /*quad1.insert(number)
     quad1.update();
