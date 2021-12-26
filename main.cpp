@@ -28,6 +28,15 @@ int main()
     vector<float>number7;
     number7.push_back(22);
     number7.push_back(22);
+    vector<float>number8;
+    number8.push_back(10);
+    number8.push_back(10);
+    vector<float>number9;
+    number9.push_back(49);
+    number9.push_back(49);
+    vector<float>number10;
+    number10.push_back(48);
+    number10.push_back(48);
 
     Quadtree quad1(2);
     quad1.insert(number1);
@@ -36,14 +45,17 @@ int main()
     quad1.insert(number4);
     quad1.insert(number5);
     quad1.insert(number6);
-    bool result = quad1.search(number7);
+    quad1.insert(number8);
+    quad1.insert(number9);
+    quad1.insert(number10);
+    //bool result = quad1.search(number7);
     /*for(float number : result)
     {
         cout << number << " ";
     }*/
-    cout << result << endl;
+    //cout << result << endl;
     //quad1.delete_element(number6);
-    //quad1.print();
+    quad1.print();
 
     /*quad1.insert(number)
     quad1.update();

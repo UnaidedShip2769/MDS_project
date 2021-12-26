@@ -198,21 +198,27 @@ void Quadtree::print()
     cout << endl << "------------" << endl << "End!" << endl << "------------" << endl;
 }*/
 
-void Quadtree::insert(vector<float> number)
+bool inSpace(vector<DimensionSpace> boundrySpace, vector<float> number)
 {
-
-    //cout << "Inserting!!" << endl;
     int j = 0;
     bool inSpace = true;
-    for(DimensionSpace &dimension : this->boundrySpace)
+    for(DimensionSpace &dimension : boundrySpace)
     {
         if(!(number.at(j) >= dimension.start && number.at(j) <= dimension.end))
         {
             inSpace = false;
+            break;
         }
         j++;
     }
-    if (!inSpace)
+    return inSpace;
+}
+
+void Quadtree::insert(vector<float> number)
+{
+
+    //cout << "Inserting!!" << endl;
+    if (!inSpace(this->boundrySpace, number))
     {
         cout << "Error!!! The point doesn't fit in the boundries of the tree!" << endl;
         return;
@@ -257,20 +263,33 @@ void Quadtree::insert(vector<float> number)
                         {
                             cout << l.start << "-" << l.end << endl;
                         }*/
+                        a.insert(number);
                         this->subtrees.push_back(a);
                         this->update(i);
                         //i.printContent();
                         //cout << "Managed to update!!!" << endl;
-                        for(Quadtree &subtree : this->subtrees)
-                        {
-                            subtree.insert(number);
-                        }
+                        //for(Quadtree &subtree : this->subtrees)
+                        //{
+                        //    subtree.insert(number);
+                        //}
                     }
                     else
                     {
+                        bool okay = false;
                         for(Quadtree &subtree : this->subtrees)
                         {
-                            subtree.insert(number);
+                            if(inSpace(subtree.boundrySpace, number))
+                            {
+                                okay = true;
+                                subtree.insert(number);
+                            }
+                        }
+                        if(!okay)
+                        {
+                            Quadtree a (this->dimension, i.boundrySpace);
+                            a.insert(number);
+                            this->subtrees.push_back(a);
+                            this->update(i);
                         }
                     }
                 }
@@ -289,7 +308,6 @@ void Quadtree::delete_element(vector<float> deleteNumber)
 
 void Quadtree::reinsert_elements(vector<vector<float>> &reinserts)
 {
-
     for (vector<float> temp : reinserts)
     {
         this->insert(temp);
