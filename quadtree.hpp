@@ -54,9 +54,12 @@ public:
     void print();
     void print(QuadNode start);
     void insert(vector<float> number);
-    void delete_element(vector<int> number);
+    void delete_element(vector<float> deleteNumber);
+    void reinsert_elements(vector<vector<float>> &reinserts);
+    bool find_and_remove_elements(vector<float> deleteNumber, vector<vector<float>> &reinserts);
     void update(QuadLeaf &leaf);
-    vector<float> NN(vector<float> number);
+    vector<float> NN(vector<float> searchNumber);
+    bool search(vector<float> searchNumber);
 };
 
 float distance(QuadLeaf leaf, float searchNumber, int dimension);

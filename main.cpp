@@ -7,9 +7,9 @@
 
 int main()
 {
-    vector<float> number;
-    number.push_back(1);
-    number.push_back(1);
+    vector<float> number1;
+    number1.push_back(1);
+    number1.push_back(1);
     vector<float> number2;
     number2.push_back(99);
     number2.push_back(99);
@@ -30,17 +30,19 @@ int main()
     number7.push_back(22);
 
     Quadtree quad1(2);
-    quad1.insert(number);
+    quad1.insert(number1);
     quad1.insert(number2);
     quad1.insert(number3);
     quad1.insert(number4);
     quad1.insert(number5);
     quad1.insert(number6);
-    vector<float> result = quad1.NN(number7);
-    for(float number : result)
+    bool result = quad1.search(number7);
+    /*for(float number : result)
     {
         cout << number << " ";
-    }
+    }*/
+    cout << result << endl;
+    //quad1.delete_element(number6);
     //quad1.print();
 
     /*quad1.insert(number)

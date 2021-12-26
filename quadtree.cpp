@@ -200,6 +200,7 @@ void Quadtree::print()
 
 void Quadtree::insert(vector<float> number)
 {
+
     //cout << "Inserting!!" << endl;
     int j = 0;
     bool inSpace = true;
@@ -228,6 +229,7 @@ void Quadtree::insert(vector<float> number)
                 if(!(number.at(k) >= j.start && number.at(k) <= j.end))
                 {
                     flag = false;
+                    break;
                 }
                 k++;
             }
@@ -278,9 +280,72 @@ void Quadtree::insert(vector<float> number)
     }
 }
 
-void Quadtree::delete_element(vector<int> number)
+void Quadtree::delete_element(vector<float> deleteNumber)
+{
+    vector<vector<float>> reinserts;
+    this->find_and_remove_elements(deleteNumber, reinserts);
+    reinsert_elements(reinserts);
+}
+
+void Quadtree::reinsert_elements(vector<vector<float>> &reinserts)
 {
 
+    for (vector<float> temp : reinserts)
+    {
+        this->insert(temp);
+    }
+}
+
+bool Quadtree::find_and_remove_elements(vector<float> deleteNumber, vector<vector<float>> &reinserts)
+{
+    bool flag = true;
+    bool found = false;
+    for(QuadLeaf &tempLeaf : this->head.leaves)
+    {
+        if(tempLeaf.contents == deleteNumber)
+        {
+
+            tempLeaf.contents.clear();
+            tempLeaf.used = false;
+            found = true;
+            break;
+        }
+    }
+    if(found)
+    {
+        for(QuadLeaf &tempLeaf : this->head.leaves)
+        {
+            if(!(tempLeaf.contents.empty()))
+            {
+                reinserts.push_back(tempLeaf.contents);
+                tempLeaf.contents.clear();
+                tempLeaf.used = false;
+            }
+        }
+    }
+    else
+    {
+        int index = 0;
+        for(Quadtree &tempQuadtree : this->subtrees)
+        {
+            flag = tempQuadtree.find_and_remove_elements(deleteNumber, reinserts);
+            if(flag)
+            {
+                this->subtrees.clear();
+                this->head.leaves.at(index).used = false;
+            }
+            index++;
+        }
+    }
+    for(QuadLeaf tempLeaf : this->head.leaves)
+    {
+        if (!tempLeaf.used == false)
+        {
+            flag = false;
+            break;
+        }
+    }
+    return flag;
 }
 
 void Quadtree::update(QuadLeaf &leaf)
@@ -322,7 +387,6 @@ float distance(QuadLeaf leaf, vector<float> searchNumber, int dimension)
 
 vector<float> Quadtree::NN(vector<float> searchNumber)
 {
-
     float r = 50;
     QuadLeaf result;
     stack<Quadtree> searchStack;
@@ -351,4 +415,29 @@ vector<float> Quadtree::NN(vector<float> searchNumber)
         }
     }
     return result.contents;
+}
+
+bool Quadtree::search(vector<float> searchNumber)
+{
+    bool found = false;
+    for (QuadLeaf tempLeaf : this->head.leaves)
+    {
+        if (tempLeaf.contents == searchNumber)
+        {
+            found = true;
+            break;
+        }
+    }
+    if(!found)
+    {
+        for (Quadtree tempQuadtree : this->subtrees)
+        {
+            found = tempQuadtree.search(searchNumber);
+            if(found)
+            {
+                break;
+            }
+        }
+    }
+    return found;
 }
