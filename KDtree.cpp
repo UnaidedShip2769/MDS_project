@@ -19,7 +19,7 @@ node* insertNode(node* root, node* point,int depth){
         return point;
     int dimension=depth%k;
 
-    if(point->coordinates.at(dimension)<(root->coordinates.at(dimension)))
+    if(point->coordinates.at(dimension)<=(root->coordinates.at(dimension)))
         root->left= insertNode(root->left,point,depth+1);
     else
         root->right= insertNode(root->right,point,depth+1);
@@ -27,17 +27,18 @@ node* insertNode(node* root, node* point,int depth){
 }
 
 //interface like function that calls insertNode with depth==0
-node* insert(node* root,vector<int> point){
+node* insert(node* root,vector<int> point,int pos){
 
-    return insertNode(root, createNode(point),0);
+    return insertNode(root, createNode(point,pos),0);
 }
 
-node* createNode(vector<int>point){
+node* createNode(vector<int>point,int pos){
 
     node* tmp=new node;
     for(int i=0;i<point.size();i++)
         tmp->coordinates.push_back(point.at(i));
     tmp->left=tmp->right=NULL;
+    tmp->pos=pos;
     return tmp;
 
 }
@@ -71,8 +72,28 @@ node* searchNode(node* root,node* point,int depth){
 node* search(node* root,vector<int>point){
     int size=root->coordinates.size();
     point.resize(size,0);
-    node* Point= createNode(point);
+    node* Point= createNode(point,-1);
     return searchNode(root, Point,0);
+}
+
+int searchNode(node* root, node* point,int depth,int hits){
+    if(root==NULL)
+        return hits;
+    if(areSame(point,root)){
+        hits++;
+        return searchNode(root->left,point,depth+1,hits);
+    }
+    int dimensions=depth%(point->coordinates.size());
+    if(point->coordinates.at(dimensions)<root->coordinates.at(dimensions))
+        return searchNode(root->left,point,depth+1,hits);
+    else
+        return searchNode(root->right,point,depth+1,hits);
+}
+int searchAll(node* root,vector<int>point){
+    int size=root->coordinates.size();
+    point.resize(size,0);
+    node* Point= createNode(point,-1);
+    return searchNode(root, Point,0,0);
 }
 
 
@@ -138,7 +159,7 @@ node* closest(node* n1,node* n2,node* point){
 }
 
 node* NN_search(node* root,node* point,int depth){
-    cout<<"peri";
+
 
     if(root==NULL)
         return NULL;
@@ -173,3 +194,4 @@ node* NN_search(node* root,node* point,int depth){
     }
     return best;
 }
+
