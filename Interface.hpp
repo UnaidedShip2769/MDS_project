@@ -19,4 +19,6 @@ vector<int> get_order_by_similarity(vector<node*> results,node* n);
 vector<int> order_by_hits(vector<int> hits);
 void searchAll_interface(vector<node *> &trees, vector<File *> &textFilePruned, vector<int> &word_shingle);
 void NNsearch_interface(vector<node *> &trees, vector<File *> &textFilePruned, vector<int> &word_shingle);
+void KD_Interface(vector<node *> &trees, int dimensions, vector<vector<vector<int>>> &sign, set<string> &vocub,
+                  vector<File *> &textFilePruned);
 #endif //MDS_PROJECT_INTERFACE_HPP

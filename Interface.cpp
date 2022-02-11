@@ -30,9 +30,19 @@ int Interface(vector<node*>&trees){
 
     vector<File*> textFilePruned=prune_files(textFileNames, getUser_tags());
 
+
     get_data(sign,shingle_size,textFilePruned,vocub);
 
-    make_KD_trees(sign,trees,dimensions);///switch statement here to select between different trees
+
+    KD_Interface(trees, dimensions, sign, vocub, textFilePruned);
+
+
+
+}
+///switch statement here to select between different trees
+void KD_Interface(vector<node *> &trees, int dimensions, vector<vector<vector<int>>> &sign, set<string> &vocub,
+                  vector<File *> &textFilePruned) {
+    make_KD_trees(sign, trees, dimensions);
 
 
 
