@@ -172,7 +172,8 @@ void Quadtree::print()
                 cout << ",";
             }
         }
-        cout << endl;
+        cout << "\t\tTimes inserted: " << j.timesInserted << endl;
+        //cout << endl;
     }
     cout << endl;
     for (Quadtree &i : this->subtrees)
@@ -214,13 +215,12 @@ bool inSpace(vector<DimensionSpace> boundrySpace, vector<float> number)
     return inSpace;
 }
 
-void Quadtree::insert(vector<float> number)
+void Quadtree::insertnumber(vector<float> number)
 {
-
     //cout << "Inserting!!" << endl;
     if (!inSpace(this->boundrySpace, number))
     {
-        cout << "Error!!! The point doesn't fit in the boundries of the tree!" << endl;
+        //cout << "Error!!! The point doesn't fit in the boundries of the tree!" << endl;
         return;
     }
     else
@@ -251,6 +251,7 @@ void Quadtree::insert(vector<float> number)
                         //cout << "Pushing back number" << endl;
                         this->head.leaves.at(leafnum).contents.push_back(num);
                     }
+                    this->head.leaves.at(leafnum).timesInserted++;
                 }
                 else
                 {
@@ -263,7 +264,7 @@ void Quadtree::insert(vector<float> number)
                         {
                             cout << l.start << "-" << l.end << endl;
                         }*/
-                        a.insert(number);
+                        a.insertnumber(number);
                         this->subtrees.push_back(a);
                         this->update(i);
                         //i.printContent();
@@ -281,13 +282,13 @@ void Quadtree::insert(vector<float> number)
                             if(inSpace(subtree.boundrySpace, number))
                             {
                                 okay = true;
-                                subtree.insert(number);
+                                subtree.insertnumber(number);
                             }
                         }
                         if(!okay)
                         {
                             Quadtree a (this->dimension, i.boundrySpace);
-                            a.insert(number);
+                            a.insertnumber(number);
                             this->subtrees.push_back(a);
                             this->update(i);
                         }
@@ -297,6 +298,16 @@ void Quadtree::insert(vector<float> number)
             leafnum++;
         }
     }
+}
+
+void Quadtree::insert(vector<float> number)
+{
+    int temp = 0;
+    if(!this->search(number, true, temp))
+    {
+        this->insertnumber(number);
+    }
+
 }
 
 void Quadtree::delete_element(vector<float> deleteNumber)
@@ -310,7 +321,7 @@ void Quadtree::reinsert_elements(vector<vector<float>> &reinserts)
 {
     for (vector<float> temp : reinserts)
     {
-        this->insert(temp);
+        this->insertnumber(temp);
     }
 }
 
@@ -375,7 +386,14 @@ void Quadtree::update(QuadLeaf &leaf)
         {
             subtree.insert(leaf.contents);
         }
+        vector<float>content = leaf.contents;
         leaf.contents.clear();
+        int temp = 0;
+        for(int i = 0; i < leaf.timesInserted-1; i++)
+        {
+            this->search(content, true, temp);
+        }
+        leaf.timesInserted = 0;
     }
 }
 
@@ -435,22 +453,28 @@ vector<float> Quadtree::NN(vector<float> searchNumber)
     return result.contents;
 }
 
-bool Quadtree::search(vector<float> searchNumber)
+bool Quadtree::search(vector<float> searchNumber, bool increment, int &timesinserted)
 {
     bool found = false;
-    for (QuadLeaf tempLeaf : this->head.leaves)
+    for (QuadLeaf &tempLeaf : this->head.leaves)
     {
         if (tempLeaf.contents == searchNumber)
         {
             found = true;
+            if(increment)
+            {
+
+                tempLeaf.timesInserted++;
+            }
+            timesinserted = tempLeaf.timesInserted;
             break;
         }
     }
     if(!found)
     {
-        for (Quadtree tempQuadtree : this->subtrees)
+        for (Quadtree &tempQuadtree : this->subtrees)
         {
-            found = tempQuadtree.search(searchNumber);
+            found = tempQuadtree.search(searchNumber, increment, timesinserted);
             if(found)
             {
                 break;

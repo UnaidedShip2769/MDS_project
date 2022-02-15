@@ -40,22 +40,38 @@ int main()
 
     Quadtree quad1(2);
     quad1.insert(number1);
+    quad1.insert(number1);
+    quad1.insert(number1);
     quad1.insert(number2);
     quad1.insert(number3);
     quad1.insert(number4);
+    quad1.insert(number1);
     quad1.insert(number5);
     quad1.insert(number6);
+    quad1.insert(number7);
     quad1.insert(number8);
     quad1.insert(number9);
     quad1.insert(number10);
-    //bool result = quad1.search(number7);
+    quad1.insert(number1);
+    quad1.print();
+    int foundtimes = 0;
+
+    bool result = quad1.search(number1, false, foundtimes);
+    if (result)
+    {
+        cout << "Found the number searched for " << foundtimes << " times!" << endl;
+    }
+    else
+    {
+        cout << "404" << endl;
+    }
     /*for(float number : result)
     {
         cout << number << " ";
     }*/
     //cout << result << endl;
     //quad1.delete_element(number6);
-    quad1.print();
+    //quad1.print();
 
     /*quad1.insert(number)
     quad1.update();

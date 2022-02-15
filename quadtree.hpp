@@ -25,6 +25,7 @@ struct QuadLeaf
 {
     bool used = false;
     vector<float> contents;
+    int timesInserted = 0;
     QuadLeaf() {};
     //QuadLeaf(vector<int> numbers);
     QuadLeaf(vector<DimensionSpace> boundrySpace);
@@ -54,12 +55,13 @@ public:
     void print();
     void print(QuadNode start);
     void insert(vector<float> number);
+    void insertnumber(vector<float> number);
     void delete_element(vector<float> deleteNumber);
     void reinsert_elements(vector<vector<float>> &reinserts);
     bool find_and_remove_elements(vector<float> deleteNumber, vector<vector<float>> &reinserts);
     void update(QuadLeaf &leaf);
     vector<float> NN(vector<float> searchNumber);
-    bool search(vector<float> searchNumber);
+    bool search(vector<float> searchNumber, bool increment, int &timesinserted);
 };
 
 float distance(QuadLeaf leaf, float searchNumber, int dimension);
