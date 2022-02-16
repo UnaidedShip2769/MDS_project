@@ -4,10 +4,18 @@
 #include "LSH.hpp"
 #include "quadtree.hpp"
 #include <stack>
+#include <chrono>
+#include "KDtree.hpp"
+#include "Interface.hpp"
+#include "RangeTree.h"
+#include "Files.hpp"
+
+using namespace std;
+using namespace std::chrono;
 
 int main()
 {
-    vector<float> number1;
+    /*vector<float> number1;
     number1.push_back(1);
     number1.push_back(1);
     vector<float> number2;
@@ -63,8 +71,8 @@ int main()
     }
     else
     {
-        cout << "404" << endl;
-    }
+        cout << "Didn't find the number serached for!" << endl;
+    }*/
     /*for(float number : result)
     {
         cout << number << " ";
@@ -81,6 +89,19 @@ int main()
     quad1.delete_element(number);
     quad1.update();
     quad1.print();*/
+
+    auto start = high_resolution_clock::now();
+
+    vector<node*>kdtrees;
+    vector<Quadtree> quadtrees;
+
+    int stat=Interface(kdtrees, quadtrees);
+
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
+
+    cout << "Time taken by function: "
+         << duration.count() << " microseconds" << endl;
 
     return 0;
 }

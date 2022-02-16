@@ -14,7 +14,7 @@ using namespace std;
 vector<File*> get_files(char* path){
     vector<File*>files;
     bool add_tags_manualy=true;
-    cout << "do you want to add tags manually? \n Yes-->1 \n No-->0" << endl;
+    cout << "Do you want to add tags to your files manually? \n 0. No \n 1. Yes\nPlease choose by entering 0 or 1: " << endl;
     cin >> add_tags_manualy;
     string temp;
     File* tmp;
@@ -37,7 +37,7 @@ vector<File*> get_files(char* path){
     }
     else {
         /* could not open directory */
-        perror ("could not open directory");
+        perror ("Could not open directory!");
     }
 
     return files;

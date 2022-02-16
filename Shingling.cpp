@@ -1,6 +1,3 @@
-//
-// Created by peri on 27/11/21.
-//
 #include <iostream>
 #include <vector>
 #include "KDtree.hpp"
@@ -9,6 +6,7 @@
 #include <string>
 #include <dirent.h>
 #include "Files.hpp"
+#include "quadtree.hpp"
 
 using namespace std;
 
@@ -152,6 +150,27 @@ void make_KD_trees(vector<vector<vector<int>>>&sign,vector<node*>&trees,int k){
             i++;
         }
         trees.push_back(tree);
+    }
+}
+
+void make_quad_trees(vector<vector<vector<int>>>&sign, vector<Quadtree>&quadtrees, int k, set<string> &vocub)
+{
+    for(vector<vector<int>> file_signs : sign)
+    {
+        Quadtree tree(k, vocub);
+        int i = 0;
+        for(vector<int> sig : file_signs)
+        {
+            vector<int> t = sig;
+            t.resize(k, 0);
+            vector<float> floats;
+            for(int tempint : t)
+            {
+                floats.push_back((float)tempint);
+            }
+            tree.insert(floats);
+        }
+        quadtrees.push_back(tree);
     }
 }
 

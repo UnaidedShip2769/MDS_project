@@ -1,7 +1,3 @@
-//
-// Created by peri on 27/11/21.
-//
-
 #ifndef MDS_PROJECT_LSH_HPP
 #define MDS_PROJECT_LSH_HPP
 #include <vector>
@@ -10,6 +6,8 @@
 #include <string>
 #include "KDtree.hpp"
 #include "Files.hpp"
+#include "quadtree.hpp"
+
 using namespace std;
 
 
@@ -25,6 +23,7 @@ void make_sign(vector<vector<vector<int>>> &sigs, set<string> &vocub, vector<vec
 ///interface function
 void get_data(vector<vector<vector<int>>>&text,int k,vector<File*>&textFileNames,set<string> &vocub);
 void make_KD_trees(vector<vector<vector<int>>>&sign,vector<node*>&trees,int k);
+void make_quad_trees(vector<vector<vector<int>>>&sign,vector<Quadtree>&quadtrees,int k,set<string>&vocub);
 void update_vocub(set<string> &vocub, vector<string> &secondaryVocub, vector<string>&shingles);
 vector<int> get_word_data(string &word, int k, set<string> &vocub, vector<string> &secondaryVocub);
 vector<string> word_Shingling(string &word, int k);

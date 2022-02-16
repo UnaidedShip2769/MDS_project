@@ -52,6 +52,7 @@ public:
     vector<vector<DimensionSpace>> makeNewDimensionSpaces();
     Quadtree(int dimensions, vector<DimensionSpace> boundrySpace);
     Quadtree(int dimensions);
+    Quadtree(int dimensions, set<string> &vocub);
     void print();
     void print(QuadNode start);
     void insert(vector<float> number);

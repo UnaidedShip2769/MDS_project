@@ -139,6 +139,35 @@ Quadtree::Quadtree(int dimensions)
     }
 }
 
+Quadtree::Quadtree(int dimensions, set<string> &vocub)
+{
+    bool flag = false;
+    while(!flag)
+    {
+        if (dimensions < 2)
+        {
+            cout << "Error!!! Dimension value less than 2!" << endl;
+        }
+        else
+        {
+            this->dimension = dimensions;
+            flag = true;
+            int numberofsubtrees = 2 ^ dimensions;
+            for(int i = 0; i < dimensions; i++)
+            {
+                DimensionSpace dim (0, vocub.size());
+                this->boundrySpace.push_back(dim);
+                this->head.contents.push_back((this->boundrySpace.at(i).end + this->boundrySpace.at(i).start) / 2);
+            }
+            vector<vector<DimensionSpace>> newDimensionSpaces = this->makeNewDimensionSpaces();
+            for (vector<DimensionSpace> i : newDimensionSpaces)
+            {
+                this->head.leaves.push_back(i);
+            }
+        }
+    }
+}
+
 void Quadtree::print()
 {
     //cout << "Printing!!!" << endl;
@@ -463,7 +492,6 @@ bool Quadtree::search(vector<float> searchNumber, bool increment, int &timesinse
             found = true;
             if(increment)
             {
-
                 tempLeaf.timesInserted++;
             }
             timesinserted = tempLeaf.timesInserted;
