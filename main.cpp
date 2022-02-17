@@ -15,7 +15,8 @@ using namespace std::chrono;
 
 int main()
 {
-    /*vector<float> number1;
+    /*
+    vector<float> number1;
     number1.push_back(1);
     number1.push_back(1);
     vector<float> number2;
@@ -64,15 +65,12 @@ int main()
     quad1.print();
     int foundtimes = 0;
 
-    bool result = quad1.search(number1, false, foundtimes);
-    if (result)
+    vector<float> result = quad1.NN({2,2});
+    for(float res : result)
     {
-        cout << "Found the number searched for " << foundtimes << " times!" << endl;
+        cout << res << ",";
     }
-    else
-    {
-        cout << "Didn't find the number serached for!" << endl;
-    }*/
+    cout << endl;*/
     /*for(float number : result)
     {
         cout << number << " ";

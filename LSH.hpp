@@ -34,4 +34,5 @@ void make_word_sign(vector<int> &sign, set<string> &vocub, vector<string> &secon
 //////similarity
 
 float JaccardCoefficient(vector<int>s1,vector<int>s2);
+float floatJaccardCoefficient(vector<float>s1,vector<float>s2);
 #endif //MDS_PROJECT_LSH_HPP

@@ -85,19 +85,39 @@ int Interface(vector<node*>&kdtrees, vector<Quadtree> &quadtrees){
 void KD_Interface(vector<node *> &kdtrees, int dimensions, vector<vector<vector<int>>> &sign, set<string> &vocub,
                   vector<File *> &textFilePruned) {
     make_KD_trees(sign, kdtrees, dimensions);
-
-
-
-
     string word;
-    cout <<"Enter Word: ";
+    cout <<"Enter the word you want to index the texts by: ";
     cin>>word;
     vector<string>sec_vocub;
     vector<int>word_shingle=get_word_data(word,3,vocub,sec_vocub);
-
-    //NNsearch_interface(trees, textFilePruned, word_shingle);
-
-    searchAll_interface(kdtrees, textFilePruned, word_shingle);
+    cout << "Select indexing method!" << endl << " 1. Search: Order by most times the word signature was found in each text" << endl <<
+         " 2. NNSearch: Index by NNSearch result from each text ordered by highest Jaccard coefficient when comared to the word signature" << endl
+         << "Please enter 1 or 2: ";
+    int selector;
+    cin >> selector;
+    bool exit = false;
+    while(!exit)
+    {
+        switch(selector)
+        {
+            case 1:
+            {
+                searchAll_interface(kdtrees, textFilePruned, word_shingle);
+                exit = true;
+                break;
+            }
+            case 2:
+            {
+                NNsearch_interface(kdtrees, textFilePruned, word_shingle);
+                exit = true;
+                break;
+            }
+            default:
+                cout << "Please enter a valid number: ";
+                cin >> selector;
+                break;
+        }
+    }
 }
 
 void Quad_Interface(vector<Quadtree> &quadtrees, int dimensions, vector<vector<vector<int>>> &sign, set<string> &vocub, vector<File *> &textFilePruned)
@@ -109,7 +129,34 @@ void Quad_Interface(vector<Quadtree> &quadtrees, int dimensions, vector<vector<v
     vector<string> sec_vocub;
     vector<int>word_shingle=get_word_data(word, 3, vocub, sec_vocub);
 
-    searchForWordInQuadtrees(quadtrees, textFilePruned, word_shingle, dimensions);
+    cout << "Select indexing method!" << endl << " 1. Search: Order by most times the word signature was found in each text" << endl <<
+    " 2. NNSearch: Index by NNSearch result from each text ordered by highest Jaccard coefficient when comared to the word signature" << endl
+    << "Please enter 1 or 2: ";
+    int selector;
+    cin >> selector;
+    bool exit = false;
+    while(!exit)
+    {
+        switch(selector)
+        {
+            case 1:
+            {
+                searchForWordInQuadtrees(quadtrees, textFilePruned, word_shingle, dimensions);
+                exit = true;
+                break;
+            }
+            case 2:
+            {
+                nnSearchForWordInQuadtrees(quadtrees, textFilePruned, word_shingle, dimensions);
+                exit = true;
+                break;
+            }
+            default:
+                cout << "Please enter a valid number: ";
+                cin >> selector;
+                break;
+        }
+    }
 }
 
 void searchAll_interface(vector<node *> &kdtrees, vector<File *> &textFilePruned, vector<int> &word_shingle) {
@@ -143,6 +190,26 @@ void searchForWordInQuadtrees(vector<Quadtree> &quadtrees, vector<File *> &textF
     vector<int> order = order_by_hits(hits);
     for(int i=0;i<order.size();i++){
         cout<<textFilePruned.at(order.at(i))->path<<" -- With "<<hits.at(order.at(i))<<" Hits!\n";
+    }
+}
+
+void nnSearchForWordInQuadtrees(vector<Quadtree> &quadtrees, vector<File*> textFilesPruned, vector<int> word_shingle, int dimensions)
+{
+    word_shingle.resize(dimensions, 0);
+    vector<vector<float>> results;
+    vector<float> float_word_shingle;
+    for (int tempint : word_shingle) {
+        float_word_shingle.push_back((float) tempint);
+    }
+    for (Quadtree &temptree : quadtrees) {
+        results.push_back(temptree.NN(float_word_shingle));
+    }
+    vector<int> order = quadtree_get_order_by_similarity(results, float_word_shingle);
+    for (int i = 0; i < results.size(); i++) {
+        int tmp = order.at(i);
+        if (tmp == 0)
+            break;
+        cout << textFilesPruned.at(tmp)->path << "\n";
     }
 }
 
@@ -221,6 +288,30 @@ vector<int> get_order_by_similarity(vector<node*> results,node* n){
     }
 
 
+    for(int i=0;i<results.size();i++){
+        int max=0;
+        int pos=0;
+        for (int j=0;j<results.size();j++){
+            if (tmp.at(j)>max){
+                max=tmp.at(j);
+                pos=j;
+
+            }
+        }
+        f.push_back(pos);
+        tmp.at(pos)=-1;
+    }
+    return f;
+}
+
+vector<int> quadtree_get_order_by_similarity(vector<vector<float>> &results, vector<float> &word_shingle)
+{
+    vector<float> tmp;
+    vector<int> f;
+    for(vector<float> tempres : results)
+    {
+        tmp.push_back(floatJaccardCoefficient(tempres, word_shingle));
+    }
     for(int i=0;i<results.size();i++){
         int max=0;
         int pos=0;

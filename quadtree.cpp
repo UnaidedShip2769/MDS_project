@@ -452,7 +452,7 @@ float distance(QuadLeaf leaf, vector<float> searchNumber, int dimension)
 
 vector<float> Quadtree::NN(vector<float> searchNumber)
 {
-    float r = 50;
+    float r = 50000;
     QuadLeaf result;
     stack<Quadtree> searchStack;
     searchStack.push(*this);
