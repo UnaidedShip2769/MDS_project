@@ -82,6 +82,19 @@ int Interface(vector<node*>&kdtrees, vector<Quadtree> &quadtrees){
     }
 }
 
+void kdtrees_combined_search(vector<node *> &trees, vector<File *> &textFilePruned, vector<int> &word_shingle) {
+    vector<int> nn=NNsearch_interface(trees, textFilePruned, word_shingle);
+
+
+    vector<vector<int>> hits=searchAll_interface(trees, textFilePruned, word_shingle);
+
+
+    vector<vector<int>>t= get_results(hits,nn);
+    for(int i=0;i<t.size();i++){
+        cout<<"\n"<<textFilePruned.at(t.at(i).at(0))->path<<" -- with "<<t.at(i).at(1)<<" hits\n";
+    }
+}
+
 void KD_Interface(vector<node *> &kdtrees, int dimensions, vector<vector<vector<int>>> &sign, set<string> &vocub,
                   vector<File *> &textFilePruned) {
     make_KD_trees(sign, kdtrees, dimensions);
@@ -109,6 +122,12 @@ void KD_Interface(vector<node *> &kdtrees, int dimensions, vector<vector<vector<
             case 2:
             {
                 NNsearch_interface(kdtrees, textFilePruned, word_shingle);
+                exit = true;
+                break;
+            }
+            case 3:
+            {
+                Print_results(kdtrees, textFilePruned, word_shingle);
                 exit = true;
                 break;
             }
@@ -159,16 +178,64 @@ void Quad_Interface(vector<Quadtree> &quadtrees, int dimensions, vector<vector<v
     }
 }
 
-void searchAll_interface(vector<node *> &kdtrees, vector<File *> &textFilePruned, vector<int> &word_shingle) {
+void Print_results(vector<node *> &trees, vector<File *> &textFilePruned, vector<int> &word_shingle) {
+    vector<int> nn=NNsearch_interface(trees, textFilePruned, word_shingle);
+
+
+    vector<vector<int>> hits=searchAll_interface(trees, textFilePruned, word_shingle);
+
+
+    vector<vector<int>>t= get_results(hits,nn);
+    for(int i=0;i<t.size();i++){
+        cout<<"\n"<<textFilePruned.at(t.at(i).at(0))->path<<" -- with "<<t.at(i).at(1)<<" hits\n";
+    }
+}
+
+vector<vector<int>>get_results(vector<vector<int>>hits,vector<int>nn){
+    vector<vector<int>> results;
+    for(int i=0;i<hits.size();i++){
+        results.push_back(hits.at(i));
+    }
+    bool exists= false;
+    vector<int> tmp;
+    for(int i=0;i<nn.size();i++){
+        for(int j=0;j<hits.size();j++){
+            if(nn.at(i)==hits.at(j).at(0)){
+                exists=true;
+                break;
+            }
+
+
+        }
+        if(!exists){
+            tmp.push_back(nn.at(i));
+            tmp.push_back(0);
+            results.push_back(tmp);
+            tmp.clear();
+        }
+        else
+            exists=false;
+    }
+    return results;
+
+}
+
+vector<vector<int>> searchAll_interface(vector<node *> &trees, vector<File *> &textFilePruned, vector<int> &word_shingle) {
+    vector<vector<int>> result;
+    vector<int> tmp;
     vector<int> hits;
-    for(int i=0;i<kdtrees.size();i++)
-        hits.push_back(searchAll(kdtrees.at(i),word_shingle));
+    for(int i=0;i<trees.size();i++)
+        hits.push_back(searchAll(trees.at(i),word_shingle));
 
 
     vector <int>order= order_by_hits(hits);
     for(int i=0;i<order.size();i++){
-        cout<<textFilePruned.at(order.at(i))->path<<" -- With "<<hits.at(order.at(i))<<" Hits!\n";
+        tmp.clear();
+        tmp.push_back(order.at(i));
+        tmp.push_back(hits.at(order.at(i)));
+        result.push_back(tmp);
     }
+    return result;
 }
 
 void searchForWordInQuadtrees(vector<Quadtree> &quadtrees, vector<File *> &textFilePruned, vector<int> word_shingle, int dimensions)
@@ -232,15 +299,18 @@ vector<int> order_by_hits(vector<int> hits){
     return order;
 }
 
-void NNsearch_interface(vector<node *> &kdtrees, vector<File *> &textFilePruned, vector<int> &word_shingle) {
-    vector<node*> results=NNsearch_trees(kdtrees, word_shingle);
+vector<int> NNsearch_interface(vector<node *> &trees, vector<File *> &textFilePruned, vector<int> &word_shingle) {
+    vector<int> result;
+    vector<node*> results=NNsearch_trees(trees, word_shingle);
     vector<int>order=get_order_by_similarity(results,createNode(word_shingle,-1));
     for(int i=0;i<results.size();i++){
         int tmp=order.at(i);
         if (tmp==0)
             break;
-        cout<<textFilePruned.at(tmp)->path<<"\n";
+        result.push_back(tmp);
+
     }
+    return result;
 }
 
 vector<node*> NNsearch_trees(vector<node *> &kdtrees, vector<int> &word_shingle) {
@@ -327,5 +397,3 @@ vector<int> quadtree_get_order_by_similarity(vector<vector<float>> &results, vec
     }
     return f;
 }
-
-
