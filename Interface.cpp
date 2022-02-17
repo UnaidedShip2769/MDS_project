@@ -5,9 +5,11 @@
 #include "Interface.hpp"
 #include "Files.hpp"
 #include "quadtree.hpp"
+#include <algorithm>
 
 
 using namespace std;
+
 
 int Interface(vector<node*>&kdtrees, vector<Quadtree> &quadtrees){
 
@@ -15,6 +17,7 @@ int Interface(vector<node*>&kdtrees, vector<Quadtree> &quadtrees){
     char* directory="../data";
     int shingle_size=3;
     int dimensions=2;
+
     vector<File*> textFileNames=get_files(directory);
 
 
@@ -29,6 +32,7 @@ int Interface(vector<node*>&kdtrees, vector<Quadtree> &quadtrees){
 
 
     get_data(sign,shingle_size,textFilePruned,vocub);
+
 
     cout << "Select your tree type!" << endl << " 1. KD-Trees" << endl << " 2. Quadtrees" << endl << " 3. R-Trees" << endl << " 4. Range Trees" << endl
     << " 5. Exit" << endl << "Please choose by entering a number from 1 to 4: ";
@@ -105,7 +109,8 @@ void KD_Interface(vector<node *> &kdtrees, int dimensions, vector<vector<vector<
     vector<int>word_shingle=get_word_data(word,3,vocub,sec_vocub);
     cout << "Select indexing method!" << endl << " 1. Search: Order by most times the word signature was found in each text" << endl <<
          " 2. NNSearch: Index by NNSearch result from each text ordered by highest Jaccard coefficient when comared to the word signature" << endl
-         << "Please enter 1 or 2: ";
+         << " 3. CombinedSearch: Results from search come first, NNSearch results come later" << endl
+         << "Please enter 1 or 3: ";
     int selector;
     cin >> selector;
     bool exit = false;
@@ -127,7 +132,7 @@ void KD_Interface(vector<node *> &kdtrees, int dimensions, vector<vector<vector<
             }
             case 3:
             {
-                Print_results(kdtrees, textFilePruned, word_shingle);
+                kdtrees_combined_search(kdtrees, textFilePruned, word_shingle);
                 exit = true;
                 break;
             }
@@ -175,19 +180,6 @@ void Quad_Interface(vector<Quadtree> &quadtrees, int dimensions, vector<vector<v
                 cin >> selector;
                 break;
         }
-    }
-}
-
-void Print_results(vector<node *> &trees, vector<File *> &textFilePruned, vector<int> &word_shingle) {
-    vector<int> nn=NNsearch_interface(trees, textFilePruned, word_shingle);
-
-
-    vector<vector<int>> hits=searchAll_interface(trees, textFilePruned, word_shingle);
-
-
-    vector<vector<int>>t= get_results(hits,nn);
-    for(int i=0;i<t.size();i++){
-        cout<<"\n"<<textFilePruned.at(t.at(i).at(0))->path<<" -- with "<<t.at(i).at(1)<<" hits\n";
     }
 }
 
@@ -319,7 +311,6 @@ vector<node*> NNsearch_trees(vector<node *> &kdtrees, vector<int> &word_shingle)
     for (int i=0;i<kdtrees.size();i++){
         results.push_back(NN_search(kdtrees.at(i),n,0));
     }
-
     return results;
 }
 
@@ -339,6 +330,7 @@ set<int> getUser_tags(){
     while(1){
 
         cout << "Input a tag to filter the texts by; \n 0. No tag \n 1. Football \n 2. Basketball \n 3. Sport \n 4. Movie\nPlease enter a number from 0 to 4: ";
+
         cin >> tmp;
         if(tmp==0);
             break;

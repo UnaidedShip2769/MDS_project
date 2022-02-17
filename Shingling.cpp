@@ -118,9 +118,7 @@ void make_sign(vector<vector<vector<int>>> &sign,set<string> &vocub, vector<vect
 
 void get_data(vector<vector<vector<int>>>&sign,int k,vector<File*> &textFileNames,set<string>&vocub){
     vector<vector<vector<string>>>text;
-
     vector<vector<string>>shin;
-
     vector<vector<char>>words;
     for(int i=0;i<textFileNames.size();i++){
         words= get_words(textFileNames.at(i)->path);
