@@ -109,7 +109,8 @@ void KD_Interface(vector<node *> &kdtrees, int dimensions, vector<vector<vector<
     vector<int>word_shingle=get_word_data(word,3,vocub,sec_vocub);
     cout << "Select indexing method!" << endl << " 1. Search: Order by most times the word signature was found in each text" << endl <<
          " 2. NNSearch: Index by NNSearch result from each text ordered by highest Jaccard coefficient when comared to the word signature" << endl
-         << "Please enter 1 or 2: ";
+         << " 3. CombinedSearch: Results from search come first, NNSearch results come later" << endl
+         << "Please enter 1 or 3: ";
     int selector;
     cin >> selector;
     bool exit = false;
