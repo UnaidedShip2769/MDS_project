@@ -88,7 +88,7 @@ int main()
     quad1.update();
     quad1.print();*/
 
-    auto start = high_resolution_clock::now();
+    /*auto start = high_resolution_clock::now();
 
     vector<node*>kdtrees;
     vector<Quadtree> quadtrees;
@@ -99,7 +99,15 @@ int main()
     auto duration = duration_cast<microseconds>(stop - start);
 
     cout << "Time taken by function: "
-         << duration.count() << " microseconds" << endl;
+         << duration.count() << " microseconds" << endl;*/
+    cout << "Reading files from directory ../data" << endl;
+    char* directory="../data";
+    vector<File*> textFileNames=get_files(directory);
+    vector<vector<vector<int>>>sign;
+    set<string>vocub;
+    set<int> userset = getUser_tags();
+    vector<File*> textFilePruned=prune_files(textFileNames, userset);
+
 
     return 0;
 }

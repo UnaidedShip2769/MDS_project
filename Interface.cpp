@@ -12,28 +12,16 @@ using namespace std;
 
 
 int Interface(vector<node*>&kdtrees, vector<Quadtree> &quadtrees){
-
     cout << "Reading files from directory ../data" << endl;
     char* directory="../data";
     int shingle_size=3;
     int dimensions=2;
-
     vector<File*> textFileNames=get_files(directory);
-
-
-
-    vector<string> tag_names={"football","basketball","sport","movies"};
-
+    vector<string> tag_names={"football","basketball","sports","movies"};
     vector<vector<vector<int>>>sign;
     set<string>vocub;
-
-
     vector<File*> textFilePruned=prune_files(textFileNames, getUser_tags());
-
-
     get_data(sign,shingle_size,textFilePruned,vocub);
-
-
     cout << "Select your tree type!" << endl << " 1. KD-Trees" << endl << " 2. Quadtrees" << endl << " 3. R-Trees" << endl << " 4. Range Trees" << endl
     << " 5. Exit" << endl << "Please choose by entering a number from 1 to 4: ";
     int selector;
@@ -375,20 +363,56 @@ vector<node*> KDtree_search(vector<int> word,vector<node*>&kdtrees){
 
 set<int> getUser_tags(){
     set<int> tags;
-    int tmp;
-    while(1){
-
-        cout << "Input a tag to filter the texts by; \n 0. No tag \n 1. Football \n 2. Basketball \n 3. Sport \n 4. Movie\nPlease enter a number from 0 to 4: ";
-
-        cin >> tmp;
-        if(tmp==0);
-            break;
-        tmp--;
-        tags.insert(tmp);
+    bool finish = false;
+    cout << "Input a tag to filter the texts by;\n 1. Football\n 2. Basketball\n 3. Sport\n 4. Movie\n 5. Save and exit" << endl;
+    while(!finish){
+        cout << "Please enter a number from 1 to 5: ";
+        int selector;
+        cin >> selector;
+        switch(selector)
+        {
+            case 1:
+            {
+                tags.insert(1);
+                cout << "Added tag 'Football' to filter by!" << endl;
+                break;
+            }
+            case 2:
+            {
+                tags.insert(2);
+                cout << "Added tag 'Basketball' to filter by!" << endl;
+                break;
+            }
+            case 3:
+            {
+                tags.insert(3);
+                cout << "Added tag 'Sports' to filter by!" << endl;
+                break;
+            }
+            case 4:
+            {
+                tags.insert(4);
+                cout << "Added tag 'Movies' to filter by!" << endl;
+                break;
+            }
+            case 5:
+            {
+                finish = true;
+                break;
+            }
+            default:
+            {
+                cout << "Please enter a valid number!!!" << endl;
+                break;
+            }
+        }
+        //cin >> tmp;
+        //if(tmp==0);
+        //    break;
+        //tmp--;
+        //tags.insert(tmp);
     }
-
     return tags;
-
 }
 
 vector<int> get_order_by_similarity(vector<node*> results,node* n){
@@ -397,8 +421,6 @@ vector<int> get_order_by_similarity(vector<node*> results,node* n){
     for(int i=0;i<results.size();i++){
        tmp.push_back(JaccardCoefficient(results.at(i)->coordinates,n->coordinates));
     }
-
-
     for(int i=0;i<results.size();i++){
         int max=0;
         int pos=0;
