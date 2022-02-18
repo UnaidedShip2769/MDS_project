@@ -154,8 +154,9 @@ void Quad_Interface(vector<Quadtree> &quadtrees, int dimensions, vector<vector<v
     vector<int>word_shingle=get_word_data(word, 3, vocub, sec_vocub);
 
     cout << "Select indexing method!" << endl << " 1. Search: Order by most times the word signature was found in each text" << endl <<
-    " 2. NNSearch: Index by NNSearch result from each text ordered by highest Jaccard coefficient when comared to the word signature" << endl
-    << "Please enter 1 or 2: ";
+         " 2. NNSearch: Index by NNSearch result from each text ordered by highest Jaccard coefficient when comared to the word signature" << endl
+         << " 3. CombinedSearch: Results from search come first, NNSearch results come later" << endl
+         << "Please enter 1 or 3: ";
     int selector;
     cin >> selector;
     bool exit = false;
@@ -165,13 +166,20 @@ void Quad_Interface(vector<Quadtree> &quadtrees, int dimensions, vector<vector<v
         {
             case 1:
             {
-                searchForWordInQuadtrees(quadtrees, textFilePruned, word_shingle, dimensions);
+                vector<int> temp;
+                searchForWordInQuadtrees(quadtrees, textFilePruned, word_shingle, dimensions, true, temp);
                 exit = true;
                 break;
             }
             case 2:
             {
-                nnSearchForWordInQuadtrees(quadtrees, textFilePruned, word_shingle, dimensions);
+                nnSearchForWordInQuadtrees(quadtrees, textFilePruned, word_shingle, dimensions, true);
+                exit = true;
+                break;
+            }
+            case 3:
+            {
+                quadtree_combined_search(quadtrees, textFilePruned, word_shingle, dimensions);
                 exit = true;
                 break;
             }
@@ -196,8 +204,6 @@ vector<vector<int>>get_results(vector<vector<int>>hits,vector<int>nn){
                 exists=true;
                 break;
             }
-
-
         }
         if(!exists){
             tmp.push_back(nn.at(i));
@@ -209,7 +215,6 @@ vector<vector<int>>get_results(vector<vector<int>>hits,vector<int>nn){
             exists=false;
     }
     return results;
-
 }
 
 vector<vector<int>> searchAll_interface(vector<node *> &trees, vector<File *> &textFilePruned, vector<int> &word_shingle) {
@@ -218,8 +223,6 @@ vector<vector<int>> searchAll_interface(vector<node *> &trees, vector<File *> &t
     vector<int> hits;
     for(int i=0;i<trees.size();i++)
         hits.push_back(searchAll(trees.at(i),word_shingle));
-
-
     vector <int>order= order_by_hits(hits);
     for(int i=0;i<order.size();i++){
         tmp.clear();
@@ -230,7 +233,7 @@ vector<vector<int>> searchAll_interface(vector<node *> &trees, vector<File *> &t
     return result;
 }
 
-void searchForWordInQuadtrees(vector<Quadtree> &quadtrees, vector<File *> &textFilePruned, vector<int> word_shingle, int dimensions)
+vector<int> searchForWordInQuadtrees(vector<Quadtree> &quadtrees, vector<File *> &textFilePruned, vector<int> word_shingle, int dimensions, bool print, vector<int> &numberoffhits)
 {
     word_shingle.resize(dimensions, 0);
     vector<int> hits;
@@ -245,14 +248,18 @@ void searchForWordInQuadtrees(vector<Quadtree> &quadtrees, vector<File *> &textF
         temptree.search(float_word_shingle, false, temphits);
         hits.push_back(temphits);
     }
-
+    numberoffhits = hits;
     vector<int> order = order_by_hits(hits);
-    for(int i=0;i<order.size();i++){
-        cout<<textFilePruned.at(order.at(i))->path<<" -- With "<<hits.at(order.at(i))<<" Hits!\n";
+    if(print)
+    {
+        for(int i=0;i<order.size();i++){
+            cout<<textFilePruned.at(order.at(i))->path<<" -- With "<<hits.at(order.at(i))<<" Hits!\n";
+        }
     }
+    return order;
 }
 
-void nnSearchForWordInQuadtrees(vector<Quadtree> &quadtrees, vector<File*> textFilesPruned, vector<int> word_shingle, int dimensions)
+vector<int> nnSearchForWordInQuadtrees(vector<Quadtree> &quadtrees, vector<File*> textFilesPruned, vector<int> word_shingle, int dimensions, bool print)
 {
     word_shingle.resize(dimensions, 0);
     vector<vector<float>> results;
@@ -264,12 +271,54 @@ void nnSearchForWordInQuadtrees(vector<Quadtree> &quadtrees, vector<File*> textF
         results.push_back(temptree.NN(float_word_shingle));
     }
     vector<int> order = quadtree_get_order_by_similarity(results, float_word_shingle);
-    for (int i = 0; i < results.size(); i++) {
-        int tmp = order.at(i);
-        if (tmp == 0)
-            break;
-        cout << textFilesPruned.at(tmp)->path << "\n";
+    if(print)
+    {
+        for (int i = 0; i < results.size(); i++) {
+            int tmp = order.at(i);
+            if (tmp == 0)
+                break;
+            cout << textFilesPruned.at(tmp)->path << "\n";
+        }
     }
+    return order;
+}
+
+void quadtree_combined_search(vector<Quadtree> &quadtrees, vector<File *> &textFilePruned, vector<int> word_shingle, int dimensions)
+{
+    vector<int> nosearchhits;
+    vector<int> searchhits = searchForWordInQuadtrees(quadtrees, textFilePruned, word_shingle, dimensions, false, nosearchhits);
+    vector<int> nnhits = nnSearchForWordInQuadtrees(quadtrees, textFilePruned, word_shingle, dimensions, false);
+    int initialprintsize = searchhits.size();
+    for(int i : nnhits)
+    {
+        bool found = false;
+        for(int j : searchhits)
+        {
+            if(i == j)
+            {
+                found = true;
+                break;
+            }
+        }
+        if(!found)
+        {
+
+            searchhits.push_back(i);
+        }
+    }
+    int i;
+    cout << "From Search algorithm:" << endl;
+    for(i=0;i<initialprintsize;i++)
+    {
+        cout<<textFilePruned.at(searchhits.at(i))->path<<" -- With "<<nosearchhits.at(searchhits.at(i))<<" Hits!\n";
+    }
+    cout << endl << "From NNSearch algorithm:" << endl;
+    while(i<searchhits.size())
+    {
+        cout<<textFilePruned.at(searchhits.at(i))->path<<endl;
+        i++;
+    }
+
 }
 
 vector<int> order_by_hits(vector<int> hits){
@@ -381,10 +430,12 @@ vector<int> quadtree_get_order_by_similarity(vector<vector<float>> &results, vec
             if (tmp.at(j)>max){
                 max=tmp.at(j);
                 pos=j;
-
             }
         }
-        f.push_back(pos);
+        if(tmp.at(pos) > 0)
+        {
+            f.push_back(pos);
+        }
         tmp.at(pos)=-1;
     }
     return f;
