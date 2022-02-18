@@ -15,9 +15,14 @@ vector<string> tag_names={"Football","Basketball","Sports","Movies"};
 
 vector<File*> get_files(char* path){
     vector<File*>files;
-    bool add_tags_manually=true;
+    int add_tags_manually=1;
     cout << "Do you want to add tags to your files manually? \n 0. No \n 1. Yes\nPlease choose by entering 0 or 1: " << endl;
     cin >> add_tags_manually;
+    while(add_tags_manually != 0 && add_tags_manually != 1)
+    {
+        cout << "Please enter a valid number!!!" << endl << "Please choose by entering 0 or 1: " << endl;
+        cin >> add_tags_manually;
+    }
     string temp;
     File* tmp;
     DIR *dir;
@@ -58,17 +63,22 @@ void set_tags(vector<File *> &files)
     bool finish2 = false;
     while(!finish2)
     {
-        cout << "Please enter the id of the text file you want to change the tags for: ";
+        cout << "Please enter the ID of the text file you want to change the tags for: ";
         int id;
         cin >> id;
+        while(id > files.size()-1)
+        {
+            cout << "Please enter a valid ID!!!" << endl << "Please enter the ID of the text file you want to change the tags for: ";
+            cin >> id;
+        }
         cout << "The selected text file is: " << files.at(id)->path << endl;
         cout << "Please enter the tags you want to add to the file!" << endl <<" 1. Football" << endl << " 2. Basketball" << endl << " 3. Sports" <<
-             endl << " 4. Movies" << endl << " 5. Print current tags" << endl << " 6. Save tags and move on to next text" << endl << " 7. Save and exit" << endl;
+             endl << " 4. Movies" << endl << " 5. Print current tags" << endl << " 6. Save tags and move on to next text" << endl << " 0. Save and exit" << endl;
         bool finish = false;
         int selection;
         while(!finish)
         {
-            cout << "Please enter a number from 1 to 5: ";
+            cout << "Please enter a number from 0 to 6: ";
             cin >> selection;
             switch(selection)
             {
@@ -109,7 +119,7 @@ void set_tags(vector<File *> &files)
                     finish = true;
                     break;
                 }
-                case 7:
+                case 0:
                 {
                     finish=true;
                     finish2=true;
@@ -117,7 +127,7 @@ void set_tags(vector<File *> &files)
                 }
                 default:
                 {
-                    cout << "Please enter a valid number!!!";
+                    cout << "Please enter a valid number!!!" << endl;
                     break;
                 }
             }

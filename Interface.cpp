@@ -16,62 +16,68 @@ int Interface(vector<node*>&kdtrees, vector<Quadtree> &quadtrees){
     char* directory="../data";
     int shingle_size=3;
     int dimensions=2;
-    vector<File*> textFileNames=get_files(directory);
-    vector<string> tag_names={"football","basketball","sports","movies"};
-    vector<vector<vector<int>>>sign;
-    set<string>vocub;
-    vector<File*> textFilePruned=prune_files(textFileNames, getUser_tags());
-    get_data(sign,shingle_size,textFilePruned,vocub);
-    cout << "Select your tree type!" << endl << " 1. KD-Trees" << endl << " 2. Quadtrees" << endl << " 3. R-Trees" << endl << " 4. Range Trees" << endl
-    << " 5. Exit" << endl << "Please choose by entering a number from 1 to 4: ";
-    int selector;
-    cin >> selector;
-    bool exit = false;
-    while(!exit)
+    int programexit = 1;
+    while(programexit == 1)
     {
-        switch(selector)
+        vector<File*> textFileNames=get_files(directory);
+        vector<vector<vector<int>>>sign;
+        set<string>vocub;
+        vector<File*> textFilePruned=prune_files(textFileNames, getUser_tags());
+        get_data(sign,shingle_size,textFilePruned,vocub);
+        bool exit = false;
+        int selector;
+        while(!exit)
         {
-            case 1:
+            cout << "Select your tree type!" << endl << " 1. KD-Trees" << endl << " 2. Quadtrees" << endl << " 3. R-Trees" << endl << " 4. Range Trees" << endl
+                 << " 0. Exit" << endl << "Please choose by entering a number from 0 to 4: ";
+            cin >> selector;
+            switch(selector)
             {
-                KD_Interface(kdtrees, dimensions, sign, vocub, textFilePruned);
-                exit = true;
-                break;
-            }
-            case 2:
-            {
-                Quad_Interface(quadtrees, dimensions, sign, vocub, textFilePruned);
-                exit = true;
-                break;
-            }
-            case 3:
-            {
-                cout << "R-Trees have not yet been implemented!" << endl << "Please choose another tree type: ";
-                cin >> selector;
-                exit = false;
-                break;
-            }
-            case 4:
-            {
-                cout << "Range Trees have not yet been implemented!" << endl << "Please choose another tree type: ";
-                cin >> selector;
-                exit = false;
-                break;
-            }
-            case 5:
-            {
-                cout << "Exiting!" << endl;
-                exit = true;
-                break;
-            }
-            default:
-            {
-                cout << "Please enter a valid number: " << endl;
-                cin >> selector;
-                exit = false;
-                break;
+                case 1:
+                {
+                    KD_Interface(kdtrees, dimensions, sign, vocub, textFilePruned);
+                    break;
+                }
+                case 2:
+                {
+                    Quad_Interface(quadtrees, dimensions, sign, vocub, textFilePruned);
+                    break;
+                }
+                case 3:
+                {
+                    cout << "R-Trees have not yet been implemented!" << endl << "Please choose another tree type: ";
+                    cin >> selector;
+                    break;
+                }
+                case 4:
+                {
+                    cout << "Range Trees have not yet been implemented!" << endl << "Please choose another tree type: ";
+                    cin >> selector;
+                    break;
+                }
+                case 0:
+                {
+                    exit = true;
+                    break;
+                }
+                default:
+                {
+                    cout << "Please enter a valid number: " << endl;
+                    cin >> selector;
+                    break;
+                }
             }
         }
+        cout << "Do you want to change the text file tags and prune again in order to index the texts again?" << endl << " 0. No" << endl << " 1. Yes" <<
+        endl << "Please enter 0 or 1: ";
+        cin >> programexit;
+        if(programexit != 0 && programexit != 1)
+        {
+            cout << "Please enter a valid number!!!" << endl << "Please enter 0 or 1: ";
+            cin >> programexit;
+        }
     }
+
 }
 
 void kdtrees_combined_search(vector<node *> &trees, vector<File *> &textFilePruned, vector<int> &word_shingle) {
@@ -83,7 +89,7 @@ void kdtrees_combined_search(vector<node *> &trees, vector<File *> &textFilePrun
 
     vector<vector<int>>t= get_results(hits,nn);
     for(int i=0;i<t.size();i++){
-        cout<<"\n"<<textFilePruned.at(t.at(i).at(0))->path<<" -- with "<<t.at(i).at(1)<<" hits\n";
+        cout<<textFilePruned.at(t.at(i).at(0))->path<<" -- with "<<t.at(i).at(1)<<" hits\n";
     }
 }
 
@@ -91,43 +97,91 @@ void KD_Interface(vector<node *> &kdtrees, int dimensions, vector<vector<vector<
                   vector<File *> &textFilePruned) {
     make_KD_trees(sign, kdtrees, dimensions);
     string word;
-    cout <<"Enter the word you want to index the texts by: ";
-    cin>>word;
-    vector<string>sec_vocub;
-    vector<int>word_shingle=get_word_data(word,3,vocub,sec_vocub);
-    cout << "Select indexing method!" << endl << " 1. Search: Order by most times the word signature was found in each text" << endl <<
-         " 2. NNSearch: Index by NNSearch result from each text ordered by highest Jaccard coefficient when comared to the word signature" << endl
-         << " 3. CombinedSearch: Results from search come first, NNSearch results come later" << endl
-         << "Please enter 1 or 3: ";
-    int selector;
-    cin >> selector;
-    bool exit = false;
-    while(!exit)
+    int wordexit = 1;
+    while(wordexit == 1)
     {
-        switch(selector)
+        cout <<"Enter the word you want to index the texts by: ";
+        cin>>word;
+        vector<string>sec_vocub;
+        vector<int>word_shingle=get_word_data(word,3,vocub,sec_vocub);
+        bool exit = false;
+        int selector;
+        while(!exit) {
+            cout << "Select indexing method!" << endl
+                 << " 1. Search: Order by most times the word signature was found in each text" << endl <<
+                 " 2. NNSearch: Index by NNSearch result from each text ordered by highest Jaccard coefficient when comared to the word signature"
+                 << endl
+                 << " 3. CombinedSearch: Results from search come first, NNSearch results come later" << endl
+                 << " 0. Exit" << endl
+                 << "Please enter a number from 0 to 3: ";
+            cin >> selector;
+            int searchagain = 0;
+            switch (selector) {
+                case 1: {
+                    searchAll_interface(kdtrees, textFilePruned, word_shingle);
+                    cout << "Search finished! Do you want to search for the same word again?" << endl << " 0. No"
+                         << endl << " 1. Yes" << endl <<
+                         "Please enter 0 or 1: ";
+                    cin >> searchagain;
+                    while(searchagain != 0 && searchagain != 1)
+                    {
+                        cout << "Please enter a valid number!!!" << endl << "Please enter 0 or 1: ";
+                        cin >> searchagain;
+                    }
+                    if (searchagain == 0) {
+                        exit = true;
+                    }
+                    break;
+                }
+                case 2: {
+                    NNsearch_interface(kdtrees, textFilePruned, word_shingle);
+                    cout << "Search finished! Do you want to search for the same word again?" << endl << " 0. No"
+                         << endl << " 1. Yes" << endl <<
+                         "Please enter 0 or 1: ";
+                    cin >> searchagain;
+                    while(searchagain != 0 && searchagain != 1)
+                    {
+                        cout << "Please enter a valid number!!!" << endl << "Please enter 0 or 1: ";
+                        cin >> searchagain;
+                    }
+                    if (searchagain == 0) {
+                        exit = true;
+                    }
+                    break;
+                }
+                case 3: {
+                    kdtrees_combined_search(kdtrees, textFilePruned, word_shingle);
+                    cout << "Search finished! Do you want to search for the same word again?" << endl << " 0. No"
+                         << endl << " 1. Yes" << endl <<
+                         "Please enter 0 or 1: ";
+                    cin >> searchagain;
+                    while(searchagain != 0 && searchagain != 1)
+                    {
+                        cout << "Please enter a valid number!!!" << endl << "Please enter 0 or 1: ";
+                        cin >> searchagain;
+                    }
+                    if (searchagain == 0) {
+                        exit = true;
+                    }
+                    break;
+                }
+                case 0: {
+                    exit = true;
+                    break;
+                }
+                default: {
+                    cout << "Please enter a valid number: ";
+                    cin >> selector;
+                    break;
+                }
+            }
+        }
+        cout << "Do you want to to index the texts by another word?" << endl << " 0. No" << endl << " 1. Yes" << endl << "Please enter 0 or 1: ";
+        cin >> wordexit;
+        while(wordexit != 0 && wordexit != 1)
         {
-            case 1:
-            {
-                searchAll_interface(kdtrees, textFilePruned, word_shingle);
-                exit = true;
-                break;
-            }
-            case 2:
-            {
-                NNsearch_interface(kdtrees, textFilePruned, word_shingle);
-                exit = true;
-                break;
-            }
-            case 3:
-            {
-                kdtrees_combined_search(kdtrees, textFilePruned, word_shingle);
-                exit = true;
-                break;
-            }
-            default:
-                cout << "Please enter a valid number: ";
-                cin >> selector;
-                break;
+            cout << "Please enter a valid number!!!" << endl << "Please enter 0 or 1: ";
+            cin >> wordexit;
         }
     }
 }
@@ -136,45 +190,94 @@ void Quad_Interface(vector<Quadtree> &quadtrees, int dimensions, vector<vector<v
 {
     make_quad_trees(sign, quadtrees, dimensions, vocub);
     string word;
-    cout << "Enter the word you want to index the texts by: ";
-    cin >> word;
-    vector<string> sec_vocub;
-    vector<int>word_shingle=get_word_data(word, 3, vocub, sec_vocub);
-
-    cout << "Select indexing method!" << endl << " 1. Search: Order by most times the word signature was found in each text" << endl <<
-         " 2. NNSearch: Index by NNSearch result from each text ordered by highest Jaccard coefficient when comared to the word signature" << endl
-         << " 3. CombinedSearch: Results from search come first, NNSearch results come later" << endl
-         << "Please enter 1 or 3: ";
-    int selector;
-    cin >> selector;
-    bool exit = false;
-    while(!exit)
+    int wordexit = 1;
+    while(wordexit == 1)
     {
-        switch(selector)
+        cout << "Enter the word you want to index the texts by: ";
+        cin >> word;
+        vector<string> sec_vocub;
+        vector<int>word_shingle=get_word_data(word, 3, vocub, sec_vocub);
+        int selector;
+        bool exit = false;
+        while(!exit)
         {
-            case 1:
+            cout << "Select indexing method!" << endl << " 1. Search: Order by most times the word signature was found in each text" << endl <<
+                 " 2. NNSearch: Index by NNSearch result from each text ordered by highest Jaccard coefficient when comared to the word signature" << endl
+                 << " 3. CombinedSearch: Results from search come first, NNSearch results come later" << endl << " 0. Exit" << endl
+                 << "Please enter a number from 0 tof 3: ";
+            cin >> selector;
+            int searchagain = 0;
+            switch(selector)
             {
-                vector<int> temp;
-                searchForWordInQuadtrees(quadtrees, textFilePruned, word_shingle, dimensions, true, temp);
-                exit = true;
-                break;
+                case 1:
+                {
+                    vector<int> temp;
+                    searchForWordInQuadtrees(quadtrees, textFilePruned, word_shingle, dimensions, true, temp);
+                    cout << "Search finished! Do you want to search for the same word again?" << endl << " 0. No" << endl << " 1. Yes" << endl <<
+                         "Please enter 0 or 1: ";
+                    cin >> searchagain;
+                    while(searchagain != 0 && searchagain != 1)
+                    {
+                        cout << "Please enter a valid number!!!" << endl << "Please enter 0 or 1: ";
+                        cin >> searchagain;
+                    }
+                    if(searchagain == 0)
+                    {
+                        exit = true;
+                    }
+                    break;
+                }
+                case 2:
+                {
+                    nnSearchForWordInQuadtrees(quadtrees, textFilePruned, word_shingle, dimensions, true);
+                    cout << "Search finished! Do you want to search for the same word again?" << endl << " 0. No" << endl << " 1. Yes" << endl <<
+                         "Please enter 0 or 1: ";
+                    cin >> searchagain;
+                    while(searchagain != 0 && searchagain != 1)
+                    {
+                        cout << "Please enter a valid number!!!" << endl << "Please enter 0 or 1: ";
+                        cin >> searchagain;
+                    }
+                    if(searchagain == 0)
+                    {
+                        exit = true;
+                    }
+                    break;
+                }
+                case 3:
+                {
+                    quadtree_combined_search(quadtrees, textFilePruned, word_shingle, dimensions);
+                    cout << "Search finished! Do you want to search for the same word again?" << endl << " 0. No" << endl << " 1. Yes" << endl <<
+                         "Please enter 0 or 1: ";
+                    cin >> searchagain;
+                    while(searchagain != 0 && searchagain != 1)
+                    {
+                        cout << "Please enter a valid number!!!" << endl << "Please enter 0 or 1: ";
+                        cin >> searchagain;
+                    }
+                    if(searchagain == 0)
+                    {
+                        exit = true;
+                    }
+                    break;
+                }
+                case 0:
+                {
+                    exit = true;
+                    break;
+                }
+                default:
+                    cout << "Please enter a valid number: ";
+                    cin >> selector;
+                    break;
             }
-            case 2:
-            {
-                nnSearchForWordInQuadtrees(quadtrees, textFilePruned, word_shingle, dimensions, true);
-                exit = true;
-                break;
-            }
-            case 3:
-            {
-                quadtree_combined_search(quadtrees, textFilePruned, word_shingle, dimensions);
-                exit = true;
-                break;
-            }
-            default:
-                cout << "Please enter a valid number: ";
-                cin >> selector;
-                break;
+        }
+        cout << "Do you want to to index the texts by another word?" << endl << " 0. No" << endl << " 1. Yes" << endl << "Please enter 0 or 1: ";
+        cin >> wordexit;
+        while(wordexit != 0 && wordexit != 1)
+        {
+            cout << "Please enter a valid number!!!" << endl << "Please enter 0 or 1: ";
+            cin >> wordexit;
         }
     }
 }
@@ -364,9 +467,9 @@ vector<node*> KDtree_search(vector<int> word,vector<node*>&kdtrees){
 set<int> getUser_tags(){
     set<int> tags;
     bool finish = false;
-    cout << "Input a tag to filter the texts by;\n 1. Football\n 2. Basketball\n 3. Sport\n 4. Movie\n 5. Save and exit" << endl;
+    cout << "Input a tag to filter the texts by;\n 1. Football\n 2. Basketball\n 3. Sport\n 4. Movie\n 0. Save and exit" << endl;
     while(!finish){
-        cout << "Please enter a number from 1 to 5: ";
+        cout << "Please enter a number from 0 to 4: ";
         int selector;
         cin >> selector;
         switch(selector)
@@ -395,7 +498,7 @@ set<int> getUser_tags(){
                 cout << "Added tag 'Movies' to filter by!" << endl;
                 break;
             }
-            case 5:
+            case 0:
             {
                 finish = true;
                 break;
