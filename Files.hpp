@@ -6,6 +6,7 @@
 #define MDS_PROJECT_FILES_HPP
 
 #include <set>
+#include <algorithm>
 
 using namespace std;
 typedef struct file{
@@ -15,8 +16,8 @@ typedef struct file{
 }File;
 vector<File*> get_files(char* path);
 File* createFile(string path,int id);
-set<int> get_tags(string path);
-bool set_compare(set<int> &lhs, set<int> &rhs);
+bool set_compare(set<int> &inputtags, set<int> &textfiletags);
 vector<File*> prune_files(vector<File*> &textFiles,set<int> tags);
-void add_tags(vector<File*> &textFiles); //na to kanei o lampro
+void add_tags(File* &textFile);
+void set_tags(vector<File *> &files);
 #endif //MDS_PROJECT_FILES_HPP

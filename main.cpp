@@ -100,6 +100,14 @@ int main()
 
     cout << "Time taken by function: "
          << duration.count() << " microseconds" << endl;
+    /*cout << "Reading files from directory ../data" << endl;
+    char* directory="../data";
+    vector<File*> textFileNames=get_files(directory);
+    vector<vector<vector<int>>>sign;
+    set<string>vocub;
+    set<int> userset = getUser_tags();
+    vector<File*> textFilePruned=prune_files(textFileNames, userset);*/
+
 
     return 0;
 }
