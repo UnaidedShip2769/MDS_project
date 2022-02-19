@@ -120,13 +120,21 @@ void KD_Interface(vector<node *> &kdtrees, int dimensions, vector<vector<vector<
         {
             case 1:
             {
-                searchAll_interface(kdtrees, textFilePruned, word_shingle);
+                vector<vector<int>> results;
+                results=searchAll_interface(kdtrees, textFilePruned, word_shingle);
+                for(int i=0;i<results.size();i++){
+                    cout<<"\n"<<textFilePruned.at(results.at(i).at(0))->path<<" -- with "<<results.at(i).at(1)<<" hits\n";
+                }
                 exit = true;
                 break;
             }
             case 2:
             {
-                NNsearch_interface(kdtrees, textFilePruned, word_shingle);
+                vector<int> results;
+                results=NNsearch_interface(kdtrees, textFilePruned, word_shingle);
+                for(int i=0;i<results.size();i++){
+                    cout<<"\n"<<textFilePruned.at(results.at(i))->path<<"\n";
+                }
                 exit = true;
                 break;
             }
