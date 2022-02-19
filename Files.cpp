@@ -150,29 +150,15 @@ vector<File*> prune_files(vector<File*> &textFiles,set<int> tags){
 
 bool set_compare(set<int> &inputtags, set<int> &textfiletags){
 
-    bool result = true;
-    vector<bool> results;
     for(int i : inputtags)
     {
         auto found = textfiletags.find(i);
         if(found == textfiletags.end())
         {
-            results.push_back(false);
-        }
-        else
-        {
-            results.push_back(true);
+            return false;
         }
     }
-    for(bool temp : results)
-    {
-        if(temp == false)
-        {
-            result = false;
-            break;
-        }
-    }
-    return result;
+    return true;
 }
 
 void add_tags(File* &textFile){
