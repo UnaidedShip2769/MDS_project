@@ -118,7 +118,11 @@ void KD_Interface(vector<node *> &kdtrees, int dimensions, vector<vector<vector<
             int searchagain = 0;
             switch (selector) {
                 case 1: {
-                    searchAll_interface(kdtrees, textFilePruned, word_shingle);
+                    vector<vector<int>> results;
+                    results=searchAll_interface(kdtrees, textFilePruned, word_shingle);
+                    for(int i=0;i<results.size();i++){
+                      cout<<textFilePruned.at(results.at(i).at(0))->path<<" -- with "<<results.at(i).at(1)<<" hits\n";
+                    }
                     cout << "Search finished! Do you want to search for the same word again?" << endl << " 0. No"
                          << endl << " 1. Yes" << endl <<
                          "Please enter 0 or 1: ";
@@ -134,7 +138,11 @@ void KD_Interface(vector<node *> &kdtrees, int dimensions, vector<vector<vector<
                     break;
                 }
                 case 2: {
-                    NNsearch_interface(kdtrees, textFilePruned, word_shingle);
+                    vector<int> results;
+                    results=NNsearch_interface(kdtrees, textFilePruned, word_shingle);
+                    for(int i=0;i<results.size();i++){
+                      cout<<textFilePruned.at(results.at(i))->path<<"\n";
+                    }
                     cout << "Search finished! Do you want to search for the same word again?" << endl << " 0. No"
                          << endl << " 1. Yes" << endl <<
                          "Please enter 0 or 1: ";
