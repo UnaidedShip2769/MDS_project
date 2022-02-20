@@ -19,7 +19,7 @@ node* insert(node* root, vector<int> point);
 ///search
 bool areSame(node* point1,node* point2);
 node* searchNode(node* root,node* point,int depth);
-node* search(node* root,vector<int>point);
+
 
 ///search for hits
 int searchAll(node* root,vector<int>point);

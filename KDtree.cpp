@@ -60,12 +60,7 @@ node* searchNode(node* root,node* point,int depth){
 }
 
 //interface like function that calls searchNode with depth==0
-node* search(node* root,vector<int>point){
-    int size=root->coordinates.size();
-    point.resize(size,0);
-    node* Point= createNode(point);
-    return searchNode(root, Point,0);
-}
+
 
 int searchNode(node* root, node* point,int depth,int hits){
     if(root==NULL)
