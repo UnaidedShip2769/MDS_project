@@ -20,18 +20,17 @@ node* insertNode(node* root, node* point,int depth){
 }
 
 //interface like function that calls insertNode with depth==0
-node* insert(node* root,vector<int> point,int pos){
+node* insert(node* root,vector<int> point){
 
-    return insertNode(root, createNode(point,pos),0);
+    return insertNode(root, createNode(point),0);
 }
 
-node* createNode(vector<int>point,int pos){
+node* createNode(vector<int>point){
 
     node* tmp=new node;
     for(int i=0;i<point.size();i++)
         tmp->coordinates.push_back(point.at(i));
     tmp->left=tmp->right=NULL;
-    tmp->pos=pos;
     return tmp;
 
 }
@@ -61,12 +60,7 @@ node* searchNode(node* root,node* point,int depth){
 }
 
 //interface like function that calls searchNode with depth==0
-node* search(node* root,vector<int>point){
-    int size=root->coordinates.size();
-    point.resize(size,0);
-    node* Point= createNode(point,-1);
-    return searchNode(root, Point,0);
-}
+
 
 int searchNode(node* root, node* point,int depth,int hits){
     if(root==NULL)
@@ -85,7 +79,7 @@ int searchNode(node* root, node* point,int depth,int hits){
 int searchAll(node* root,vector<int>point){
     int size=root->coordinates.size();
     point.resize(size,0);
-    node* Point= createNode(point,-1);
+    node* Point= createNode(point);
     return searchNode(root, Point,0,0);
 }
 
@@ -93,38 +87,10 @@ int searchAll(node* root,vector<int>point){
 
 //////////////////////////
 ///DELETE
-node* findMin(node* root,int d,int depth){
-    if (root==NULL)
-        return NULL;
-    int dimension=depth%root->coordinates.size();
-    node* tmpL=findMin(root->left,d,depth+1);
-    if(dimension==d){
-        if(root->left==NULL)
-            return root;
 
-
-        if((root->coordinates.at(d))<tmpL->coordinates.at(d))
-            return root;
-
-        return tmpL;
-    }
-    node* tmpR=findMin(root->right,d,depth+1);
-    if((root->coordinates.at(d)<tmpL->coordinates.at(d))&&
-       (root->coordinates.at(d)<tmpR->coordinates.at(d))){
-        return root;
-    }
-    else if((tmpL->coordinates.at(d)<tmpR->coordinates.at(d))&&
-            (tmpL->coordinates.at(d)<root->coordinates.at(d))){
-        return tmpL;
-    }
-    else
-        return tmpR;
-}
 
 ///interface like function that calls findMin with depth==0
-node* Min(node* root,int d){
-    findMin(root,d,0);
-}
+
 
 
 ///////////////////////////
