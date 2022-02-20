@@ -5,11 +5,10 @@
 #include "Interface.hpp"
 #include "Files.hpp"
 #include "quadtree.hpp"
-#include <algorithm>
-
+#include <chrono>
 
 using namespace std;
-
+using namespace std::chrono;
 
 int Interface(vector<node*>&kdtrees, vector<Quadtree> &quadtrees){
     cout << "Reading files from directory ../data" << endl;
@@ -28,8 +27,8 @@ int Interface(vector<node*>&kdtrees, vector<Quadtree> &quadtrees){
         int selector;
         while(!exit)
         {
-            cout << "Select your tree type!" << endl << " 1. KD-Trees" << endl << " 2. Quadtrees" << endl << " 3. R-Trees" << endl << " 4. Range Trees" << endl
-                 << " 0. Exit" << endl << "Please choose by entering a number from 0 to 4: ";
+            cout << "Select your tree type!" << endl << " 1. KD-Trees" << endl << " 2. Quadtrees" << endl << " 0. Exit"
+            << endl << "Please choose by entering a number from 0 to 2: ";
             cin >> selector;
             switch(selector)
             {
@@ -41,18 +40,6 @@ int Interface(vector<node*>&kdtrees, vector<Quadtree> &quadtrees){
                 case 2:
                 {
                     Quad_Interface(quadtrees, dimensions, sign, vocub, textFilePruned);
-                    break;
-                }
-                case 3:
-                {
-                    cout << "R-Trees have not yet been implemented!" << endl << "Please choose another tree type: ";
-                    cin >> selector;
-                    break;
-                }
-                case 4:
-                {
-                    cout << "Range Trees have not yet been implemented!" << endl << "Please choose another tree type: ";
-                    cin >> selector;
                     break;
                 }
                 case 0:
@@ -82,11 +69,7 @@ int Interface(vector<node*>&kdtrees, vector<Quadtree> &quadtrees){
 
 void kdtrees_combined_search(vector<node *> &trees, vector<File *> &textFilePruned, vector<int> &word_shingle) {
     vector<int> nn=NNsearch_interface(trees, textFilePruned, word_shingle);
-
-
     vector<vector<int>> hits=searchAll_interface(trees, textFilePruned, word_shingle);
-
-
     vector<vector<int>>t= get_results(hits,nn);
     for(int i=0;i<t.size();i++){
         cout<<textFilePruned.at(t.at(i).at(0))->path<<" -- with "<<t.at(i).at(1)<<" hits\n";
@@ -95,7 +78,13 @@ void kdtrees_combined_search(vector<node *> &trees, vector<File *> &textFilePrun
 
 void KD_Interface(vector<node *> &kdtrees, int dimensions, vector<vector<vector<int>>> &sign, set<string> &vocub,
                   vector<File *> &textFilePruned) {
+    //auto start = high_resolution_clock::now();
     make_KD_trees(sign, kdtrees, dimensions);
+    //auto stop = high_resolution_clock::now();
+    //auto duration = duration_cast<microseconds>(stop - start);
+    //cout << "Time taken by function: "
+    //     << duration.count() << " microseconds" << endl;
+    cout << "Reading files from directory ../data" << endl;
     string word;
     int wordexit = 1;
     while(wordexit == 1)
@@ -119,7 +108,12 @@ void KD_Interface(vector<node *> &kdtrees, int dimensions, vector<vector<vector<
             switch (selector) {
                 case 1: {
                     vector<vector<int>> results;
+                    //auto start = high_resolution_clock::now();
                     results=searchAll_interface(kdtrees, textFilePruned, word_shingle);
+                    //auto stop = high_resolution_clock::now();
+                    //auto duration = duration_cast<microseconds>(stop - start);
+                    //cout << "Time taken by function: "
+                    //     << duration.count() << " microseconds" << endl;
                     for(int i=0;i<results.size();i++){
                       cout<<textFilePruned.at(results.at(i).at(0))->path<<" -- with "<<results.at(i).at(1)<<" hits\n";
                     }
@@ -139,7 +133,12 @@ void KD_Interface(vector<node *> &kdtrees, int dimensions, vector<vector<vector<
                 }
                 case 2: {
                     vector<int> results;
+                    //auto start = high_resolution_clock::now();
                     results=NNsearch_interface(kdtrees, textFilePruned, word_shingle);
+                    //auto stop = high_resolution_clock::now();
+                    //auto duration = duration_cast<microseconds>(stop - start);
+                    //cout << "Time taken by function: "
+                    //     << duration.count() << " microseconds" << endl;
                     for(int i=0;i<results.size();i++){
                       cout<<textFilePruned.at(results.at(i))->path<<"\n";
                     }
@@ -196,7 +195,12 @@ void KD_Interface(vector<node *> &kdtrees, int dimensions, vector<vector<vector<
 
 void Quad_Interface(vector<Quadtree> &quadtrees, int dimensions, vector<vector<vector<int>>> &sign, set<string> &vocub, vector<File *> &textFilePruned)
 {
+    //auto start = high_resolution_clock::now();
     make_quad_trees(sign, quadtrees, dimensions, vocub);
+    //auto stop = high_resolution_clock::now();
+    //auto duration = duration_cast<microseconds>(stop - start);
+    //cout << "Time taken by function: "
+    //     << duration.count() << " microseconds" << endl;
     string word;
     int wordexit = 1;
     while(wordexit == 1)
@@ -212,7 +216,7 @@ void Quad_Interface(vector<Quadtree> &quadtrees, int dimensions, vector<vector<v
             cout << "Select indexing method!" << endl << " 1. Search: Order by most times the word signature was found in each text" << endl <<
                  " 2. NNSearch: Index by NNSearch result from each text ordered by highest Jaccard coefficient when comared to the word signature" << endl
                  << " 3. CombinedSearch: Results from search come first, NNSearch results come later" << endl << " 0. Exit" << endl
-                 << "Please enter a number from 0 tof 3: ";
+                 << "Please enter a number from 0 to 3: ";
             cin >> selector;
             int searchagain = 0;
             switch(selector)
@@ -220,7 +224,12 @@ void Quad_Interface(vector<Quadtree> &quadtrees, int dimensions, vector<vector<v
                 case 1:
                 {
                     vector<int> temp;
+                    //auto start = high_resolution_clock::now();
                     searchForWordInQuadtrees(quadtrees, textFilePruned, word_shingle, dimensions, true, temp);
+                    //auto stop = high_resolution_clock::now();
+                    //auto duration = duration_cast<microseconds>(stop - start);
+                    //cout << "Time taken by function: "
+                    //     << duration.count() << " microseconds" << endl;
                     cout << "Search finished! Do you want to search for the same word again?" << endl << " 0. No" << endl << " 1. Yes" << endl <<
                          "Please enter 0 or 1: ";
                     cin >> searchagain;
@@ -237,7 +246,12 @@ void Quad_Interface(vector<Quadtree> &quadtrees, int dimensions, vector<vector<v
                 }
                 case 2:
                 {
+                    //auto start = high_resolution_clock::now();
                     nnSearchForWordInQuadtrees(quadtrees, textFilePruned, word_shingle, dimensions, true);
+                    //auto stop = high_resolution_clock::now();
+                    //auto duration = duration_cast<microseconds>(stop - start);
+                    //cout << "Time taken by function: "
+                    //     << duration.count() << " microseconds" << endl;
                     cout << "Search finished! Do you want to search for the same word again?" << endl << " 0. No" << endl << " 1. Yes" << endl <<
                          "Please enter 0 or 1: ";
                     cin >> searchagain;
@@ -372,7 +386,7 @@ vector<int> nnSearchForWordInQuadtrees(vector<Quadtree> &quadtrees, vector<File*
     vector<int> order = quadtree_get_order_by_similarity(results, float_word_shingle);
     if(print)
     {
-        for (int i = 0; i < results.size(); i++) {
+        for (int i = 0; i < order.size(); i++) {
             int tmp = order.at(i);
             if (tmp == 0)
                 break;
@@ -417,7 +431,6 @@ void quadtree_combined_search(vector<Quadtree> &quadtrees, vector<File *> &textF
         cout<<textFilePruned.at(searchhits.at(i))->path<<endl;
         i++;
     }
-
 }
 
 vector<int> order_by_hits(vector<int> hits){
@@ -448,7 +461,6 @@ vector<int> NNsearch_interface(vector<node *> &trees, vector<File *> &textFilePr
         if (tmp==0)
             break;
         result.push_back(tmp);
-
     }
     return result;
 }
@@ -458,16 +470,6 @@ vector<node*> NNsearch_trees(vector<node *> &kdtrees, vector<int> &word_shingle)
     node* n= createNode(word_shingle,-1);
     for (int i=0;i<kdtrees.size();i++){
         results.push_back(NN_search(kdtrees.at(i),n,0));
-    }
-    return results;
-}
-
-vector<node*> KDtree_search(vector<int> word,vector<node*>&kdtrees){
-    vector<node*>results;
-    node* tmp;
-    for(node* tree:kdtrees){
-        tmp=search(tree,word);
-        results.push_back(tmp);
     }
     return results;
 }
@@ -517,11 +519,6 @@ set<int> getUser_tags(){
                 break;
             }
         }
-        //cin >> tmp;
-        //if(tmp==0);
-        //    break;
-        //tmp--;
-        //tags.insert(tmp);
     }
     return tags;
 }

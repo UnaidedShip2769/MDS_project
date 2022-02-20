@@ -1,5 +1,6 @@
 #include <vector>
 #include <algorithm>
+
 using namespace std;
 
 float JaccardCoefficient(vector<int> s1,vector<int> s2){
