@@ -455,7 +455,7 @@ vector<int> order_by_hits(vector<int> hits){
 vector<int> NNsearch_interface(vector<node *> &trees, vector<File *> &textFilePruned, vector<int> &word_shingle) {
     vector<int> result;
     vector<node*> results=NNsearch_trees(trees, word_shingle);
-    vector<int>order=get_order_by_similarity(results,createNode(word_shingle,-1));
+    vector<int>order=get_order_by_similarity(results,createNode(word_shingle));
     for(int i=0;i<results.size();i++){
         int tmp=order.at(i);
         if (tmp==0)
@@ -467,7 +467,7 @@ vector<int> NNsearch_interface(vector<node *> &trees, vector<File *> &textFilePr
 
 vector<node*> NNsearch_trees(vector<node *> &kdtrees, vector<int> &word_shingle) {
     vector<node*> results;
-    node* n= createNode(word_shingle,-1);
+    node* n= createNode(word_shingle);
     for (int i=0;i<kdtrees.size();i++){
         results.push_back(NN_search(kdtrees.at(i),n,0));
     }

@@ -20,18 +20,17 @@ node* insertNode(node* root, node* point,int depth){
 }
 
 //interface like function that calls insertNode with depth==0
-node* insert(node* root,vector<int> point,int pos){
+node* insert(node* root,vector<int> point){
 
-    return insertNode(root, createNode(point,pos),0);
+    return insertNode(root, createNode(point),0);
 }
 
-node* createNode(vector<int>point,int pos){
+node* createNode(vector<int>point){
 
     node* tmp=new node;
     for(int i=0;i<point.size();i++)
         tmp->coordinates.push_back(point.at(i));
     tmp->left=tmp->right=NULL;
-    tmp->pos=pos;
     return tmp;
 
 }
@@ -64,7 +63,7 @@ node* searchNode(node* root,node* point,int depth){
 node* search(node* root,vector<int>point){
     int size=root->coordinates.size();
     point.resize(size,0);
-    node* Point= createNode(point,-1);
+    node* Point= createNode(point);
     return searchNode(root, Point,0);
 }
 
@@ -85,7 +84,7 @@ int searchNode(node* root, node* point,int depth,int hits){
 int searchAll(node* root,vector<int>point){
     int size=root->coordinates.size();
     point.resize(size,0);
-    node* Point= createNode(point,-1);
+    node* Point= createNode(point);
     return searchNode(root, Point,0,0);
 }
 

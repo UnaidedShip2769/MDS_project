@@ -130,7 +130,7 @@ void make_KD_trees(vector<vector<vector<int>>>&sign,vector<node*>&trees,int k){
         {
             vector<int> t = sig;
             t.resize(k,0);
-            tree=insert(tree,t,i);
+            tree=insert(tree,t);
             i++;
         }
         trees.push_back(tree);

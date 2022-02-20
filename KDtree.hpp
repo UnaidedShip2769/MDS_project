@@ -8,14 +8,13 @@ typedef struct KDtree_node{
     vector<int>coordinates;
     struct KDtree_node* left;
     struct KDtree_node* right;
-    int pos;
 
 }node;
 
 ///insert
-node* createNode(vector<int>point,int pos);
+node* createNode(vector<int>point);
 node* insertNode(node* root, node* point,int depth);
-node* insert(node* root, vector<int> point,int pos);
+node* insert(node* root, vector<int> point);
 
 ///search
 bool areSame(node* point1,node* point2);
