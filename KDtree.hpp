@@ -25,8 +25,7 @@ node* searchNode(node* root,node* point,int depth);
 int searchAll(node* root,vector<int>point);
 int searchNode(node* root, node* point,int depth,int hits);
 
-///delete
-node* findMin(node* root,int d,int depth);
+
 
 
 ///NNsearch
