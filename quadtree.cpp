@@ -1,11 +1,6 @@
-//
-// Created by Gregory on 12/3/2021.
-//
-
 #include "quadtree.hpp"
 #include <iostream>
 #include <vector>
-#include <iterator>
 #include <math.h>
 #include <stack>
 
@@ -87,7 +82,6 @@ Quadtree::Quadtree(int dimensions, vector<DimensionSpace> boundrySpace)
         {
             this->dimension = dimensions;
             flag = true;
-            int numberofsubtrees = 2 ^ dimensions;
             int i = 0;
             for(DimensionSpace &dim : boundrySpace)
             {
@@ -117,7 +111,6 @@ Quadtree::Quadtree(int dimensions)
         {
             this->dimension = dimensions;
             flag = true;
-            int numberofsubtrees = 2 ^ dimensions;
             for(int i = 0; i < dimensions; i++)
             {
                 int dimentionStart;
@@ -152,7 +145,6 @@ Quadtree::Quadtree(int dimensions, set<string> &vocub)
         {
             this->dimension = dimensions;
             flag = true;
-            int numberofsubtrees = 2 ^ dimensions;
             for(int i = 0; i < dimensions; i++)
             {
                 DimensionSpace dim (0, vocub.size());
@@ -170,7 +162,6 @@ Quadtree::Quadtree(int dimensions, set<string> &vocub)
 
 void Quadtree::print()
 {
-    //cout << "Printing!!!" << endl;
     cout << "QuadNode contents: ";
     int k = 0;
     for(float &j : this->head.contents)
@@ -202,7 +193,6 @@ void Quadtree::print()
             }
         }
         cout << "\t\tTimes inserted: " << j.timesInserted << endl;
-        //cout << endl;
     }
     cout << endl;
     for (Quadtree &i : this->subtrees)
@@ -210,23 +200,6 @@ void Quadtree::print()
         i.print();
     }
 }
-
-/*void QuadLeaf::printContent()
-{
-    int j = 1;
-    cout << "------------" << endl << "Let's see the contents now: " << endl << "------------" << endl;
-    for(int &i : this->contents)
-    {
-        //cout << "leaf->contents.size() = " << leaf->contents.size() << endl;
-        cout << i;
-        if (j < this->contents.size())
-        {
-            cout << ",";
-        }
-        j++;
-    }
-    cout << endl << "------------" << endl << "End!" << endl << "------------" << endl;
-}*/
 
 bool inSpace(vector<DimensionSpace> boundrySpace, vector<float> number)
 {
@@ -246,10 +219,8 @@ bool inSpace(vector<DimensionSpace> boundrySpace, vector<float> number)
 
 void Quadtree::insertnumber(vector<float> number)
 {
-    //cout << "Inserting!!" << endl;
     if (!inSpace(this->boundrySpace, number))
     {
-        //cout << "Error!!! The point doesn't fit in the boundries of the tree!" << endl;
         return;
     }
     else
@@ -273,11 +244,8 @@ void Quadtree::insertnumber(vector<float> number)
                 if(i.used == false)
                 {
                     i.used = true;
-                    //cout << "Found empty contents" << endl;
-                    //i.contents = number;
                     for (int num : number)
                     {
-                        //cout << "Pushing back number" << endl;
                         this->head.leaves.at(leafnum).contents.push_back(num);
                     }
                     this->head.leaves.at(leafnum).timesInserted++;
@@ -286,22 +254,10 @@ void Quadtree::insertnumber(vector<float> number)
                 {
                     if(this->subtrees.empty())
                     {
-                        //cout << "Splitting!!!" << endl;
                         Quadtree a (this->dimension, i.boundrySpace);
-                        //cout << "New boundrySpace" << endl;
-                        /*for (DimensionSpace &l : i.boundrySpace)
-                        {
-                            cout << l.start << "-" << l.end << endl;
-                        }*/
                         a.insertnumber(number);
                         this->subtrees.push_back(a);
                         this->update(i);
-                        //i.printContent();
-                        //cout << "Managed to update!!!" << endl;
-                        //for(Quadtree &subtree : this->subtrees)
-                        //{
-                        //    subtree.insert(number);
-                        //}
                     }
                     else
                     {
@@ -336,7 +292,6 @@ void Quadtree::insert(vector<float> number)
     {
         this->insertnumber(number);
     }
-
 }
 
 void Quadtree::delete_element(vector<float> deleteNumber)
@@ -362,7 +317,6 @@ bool Quadtree::find_and_remove_elements(vector<float> deleteNumber, vector<vecto
     {
         if(tempLeaf.contents == deleteNumber)
         {
-
             tempLeaf.contents.clear();
             tempLeaf.used = false;
             found = true;
@@ -410,7 +364,6 @@ void Quadtree::update(QuadLeaf &leaf)
 {
     if(leaf.used == true && !(this->subtrees.empty()))
     {
-        //cout << "Get's into while" << endl;
         for(Quadtree &subtree : this->subtrees)
         {
             subtree.insert(leaf.contents);
@@ -428,7 +381,6 @@ void Quadtree::update(QuadLeaf &leaf)
 
 float distance(QuadNode node, vector<float> searchNumber, int dimension)
 {
-
     float result = 0;
     for(int i = 0; i < dimension; i++)
     {
@@ -440,7 +392,6 @@ float distance(QuadNode node, vector<float> searchNumber, int dimension)
 
 float distance(QuadLeaf leaf, vector<float> searchNumber, int dimension)
 {
-
     float result = 0;
     for(int i = 0; i < dimension; i++)
     {

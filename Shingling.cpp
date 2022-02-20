@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include "KDtree.hpp"
-#include <algorithm>
 #include "LSH.hpp"
 #include <string>
 #include <dirent.h>
@@ -25,9 +24,9 @@ vector<vector<string>> Shingling(vector<vector<char>>&words,int k){
         }
         shingles.push_back(tmp);
     }
-
     return shingles;
 }
+
 bool rules(vector<char>&words){
     //set rules for keyword selection
     int MinSize=4;
@@ -35,6 +34,7 @@ bool rules(vector<char>&words){
         return false;
     return true;
 }
+
 vector<vector<char>>get_words(string path){
     bool flag =false;
     vector<vector<char>> words;
@@ -50,11 +50,9 @@ vector<vector<char>>get_words(string path){
         if(!(((letter>64)&&(letter<91))||((letter>96)&&(letter<123))))
             flag=true;
 
-
         if((letter>64)&&(letter<91)){
             letter+=32;
         }
-
 
         if(flag){
             if(rules(tmp))
@@ -68,9 +66,6 @@ vector<vector<char>>get_words(string path){
     return words;
 }
 
-
-
-
 void make_vocub(set<string>&vocub,vector<vector<vector<string>>>&text){
     for(vector<vector<string>> texts : text) {
         for (vector<string> word: texts) {
@@ -80,9 +75,6 @@ void make_vocub(set<string>&vocub,vector<vector<vector<string>>>&text){
         }
     }
 }
-
-
-
 
 void make_sign(vector<vector<vector<int>>> &sign,set<string> &vocub, vector<vector<vector<string>>> &text)
 {
@@ -106,7 +98,6 @@ void make_sign(vector<vector<vector<int>>> &sign,set<string> &vocub, vector<vect
                     position++;
                 }
             }
-
             s.push_back(temp_sig);
         }
         sign.push_back(s);
@@ -124,14 +115,10 @@ void get_data(vector<vector<vector<int>>>&sign,int k,vector<File*> &textFileName
         words= get_words(textFileNames.at(i)->path);
         shin= Shingling(words,k);
         text.push_back(shin);
-
     }
     make_vocub(vocub, text);
-
     make_sign(sign, vocub, text);
-
 }
-
 
 void make_KD_trees(vector<vector<vector<int>>>&sign,vector<node*>&trees,int k){
     node* tree;
@@ -141,7 +128,6 @@ void make_KD_trees(vector<vector<vector<int>>>&sign,vector<node*>&trees,int k){
         int i=0;
         for(vector<int> sig : file_signs)
         {
-
             vector<int> t = sig;
             t.resize(k,0);
             tree=insert(tree,t,i);
@@ -214,7 +200,6 @@ void make_word_sign(vector<int> &sign, set<string> &vocub, vector<string> &secon
 {
     for(string shin : shingles)
     {
-
         int position = 0;
         for(string voc_shin : vocub)
         {
@@ -250,5 +235,3 @@ vector<int> get_word_data(string &word, int k, set<string> &vocub, vector<string
     return signatures;
 
 }
-
-
