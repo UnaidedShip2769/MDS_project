@@ -116,9 +116,7 @@ node* findMin(node* root,int d,int depth){
 }
 
 ///interface like function that calls findMin with depth==0
-node* Min(node* root,int d){
-    findMin(root,d,0);
-}
+
 
 
 ///////////////////////////

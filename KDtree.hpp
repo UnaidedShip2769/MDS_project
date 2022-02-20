@@ -27,7 +27,7 @@ int searchNode(node* root, node* point,int depth,int hits);
 
 ///delete
 node* findMin(node* root,int d,int depth);
-node* Min(node* root,int d);
+
 
 ///NNsearch
 double dist(node* n1,node* n2);
