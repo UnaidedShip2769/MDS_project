@@ -1,9 +1,4 @@
-//
-// Created by peri on 3/2/22.
-//
-
 #include <vector>
-#include <algorithm>
 #include <string>
 #include <dirent.h>
 #include "Files.hpp"

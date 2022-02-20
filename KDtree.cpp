@@ -1,13 +1,6 @@
-//
-// Created by peri on 7/12/21.
-//
-
 #include "KDtree.hpp"
-#include <iostream>
 #include <vector>
-#include <iterator>
 #include <math.h>
-
 
 //////////////////////
 ///INSERT
@@ -42,7 +35,6 @@ node* createNode(vector<int>point,int pos){
     return tmp;
 
 }
-
 
 
 ////////////////////////
@@ -89,6 +81,7 @@ int searchNode(node* root, node* point,int depth,int hits){
     else
         return searchNode(root->right,point,depth+1,hits);
 }
+
 int searchAll(node* root,vector<int>point){
     int size=root->coordinates.size();
     point.resize(size,0);
@@ -133,11 +126,6 @@ node* Min(node* root,int d){
     findMin(root,d,0);
 }
 
-node* delNode(node* root,node* point, int depth){
-    ////////
-}
-
-
 
 ///////////////////////////
 //NearestNeighbor SEARCH
@@ -160,7 +148,6 @@ node* closest(node* n1,node* n2,node* point){
 
 node* NN_search(node* root,node* point,int depth){
 
-
     if(root==NULL)
         return NULL;
     point->coordinates.resize(root->coordinates.size(),0);
@@ -169,7 +156,6 @@ node* NN_search(node* root,node* point,int depth){
     int d=depth%point->coordinates.size();
     node* best=NULL;
     node* tmp=NULL;
-
 
     if(point->coordinates.at(d)<root->coordinates.at(d)){
         nextBranch=root->left;
@@ -194,4 +180,3 @@ node* NN_search(node* root,node* point,int depth){
     }
     return best;
 }
-

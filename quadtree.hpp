@@ -1,7 +1,3 @@
-//
-// Created by Gregory on 12/3/2021.
-//
-
 #ifndef MDS_PROJECT_QUADTREE_HPP
 #define MDS_PROJECT_QUADTREE_HPP
 
@@ -30,8 +26,6 @@ struct QuadLeaf
     //QuadLeaf(vector<int> numbers);
     QuadLeaf(vector<DimensionSpace> boundrySpace);
     vector<DimensionSpace> boundrySpace;
-public:
-    void printContent();
 };
 
 struct QuadNode
@@ -64,8 +58,5 @@ public:
     vector<float> NN(vector<float> searchNumber);
     bool search(vector<float> searchNumber, bool increment, int &timesinserted);
 };
-
-float distance(QuadLeaf leaf, float searchNumber, int dimension);
-float distance(QuadNode node, float searchNumber, int dimension);
 
 #endif //MDS_PROJECT_QUADTREE_HPP
